@@ -13,18 +13,16 @@
 
 <div class="container">
 
-<form>
+  <div class="text-right">
+    <button class="btn btn-sm btn-danger" ng-click="clear()">Effacer</button>
+  </div>
+
   <div class="form-group">
     <input placeholder="Titre" ng-model="data.name" class="form-control input-lg" />
   </div>
 
-  <div class="form-group">
-    <textarea placeholder="Description" ng-model="data.description"
-              class="form-control" ></textarea>
-  </div>
-
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-xs-6">
       <label>Volume final</label>
       <div class="form-group">
         <div class="input-group">
@@ -33,12 +31,33 @@
         </div>
       </div>
     </div>
-    <div class="col-sm-6">
+    <div class="col-xs-6">
       <label>Volume ébu</label>
       <div class="form-group">
         <div class="input-group">
-          <input type="number" ng-model="data.boilSize" class="form-control" />
+          <input type="number" ng-model="recipe.boilSize" class="form-control"
+                 disabled/>
           <span class="input-group-addon">L</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <label>DI</label>
+      <div class="form-group">
+        <div class="input-group">
+          <span ng-bind="recipe.og.toFixed(3)"
+                class="form-control" disabled></span>
+          <span class="input-group-addon">SG</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <label>DF</label>
+      <div class="form-group">
+        <div class="input-group">
+          <span ng-bind="recipe.og.toFixed(3)"
+                class="form-control" disabled></span>
+          <span class="input-group-addon">SG</span>
         </div>
       </div>
     </div>
@@ -92,11 +111,19 @@
       </tr>
     </tbody>
   </table>
-  
-</form>
 
-<pre>{{ recipe | bhDisplay }}</pre>
-<pre>{{ recipe }}</pre>
+  <pre>{{ recipe | bhDisplay }}</pre>
+  <pre>{{ recipe }}</pre>
+
+  <h2>Paramètres</h2>
+
+  <label>Taux d'évaporation</label>
+  <div class="form-group">
+    <div class="input-group">
+      <span ng-bind="parameters.boil_rate" class="form-control"></span>
+      <span class="input-group-addon">%/h</span>
+    </div>
+  </div>
 
 </div>
 

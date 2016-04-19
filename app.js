@@ -1,10 +1,27 @@
 angular.module('brauhaus', ['ui.bootstrap'])
   .controller('BrauhausController', function($scope) {
-    $scope.data = {
-      fermentables: [],
-      spices: []
+    $scope.parameters = {
+      boil_rate: 10
+    };
+  
+    var create_recipe_data = function() {
+      return {
+        fermentables: [],
+        spices: []
+      };
+    };
+
+    $scope.data = localStorage.data ? JSON.parse(localStorage.data) : 
+                                      create_recipe_data();
+    
+    $scope.clear = function() {
+      $scope.data = create_recipe_data();
     };
     
+    $scope.$watch('data', function(data){
+      localStorage.data = JSON.stringify(data);
+    }, true);
+
     $scope.$watch('data', function(data){
       var recipe = new Brauhaus.Recipe(data);
       recipe.calculate();
