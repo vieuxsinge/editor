@@ -30,6 +30,10 @@ angular.module('beerEditor', [])
       $scope.equipment = angular.copy(DEFAULT_EQUIPMENT);
     };
     
+    $scope.remove = function(array, item) {
+      array.splice(item, 1);
+    };
+    
     $scope.autostore('recipe', DEFAULT_RECIPE);
     $scope.autostore('equipment', DEFAULT_EQUIPMENT);
 
@@ -58,10 +62,10 @@ angular.module('beerEditor', [])
 
     // Ingredients
     $scope.fermentablesTypes = [
-      {filter: {type:'dme'}, name: "Extraits de malt"},
       {filter: {type:'base'}, name: "Malts de base"},
       {filter: {type:'cara'}, name: "Malts caramel"},
       {filter: {type:'roasted'}, name: "Malts grillés"},
+      {filter: {type:'dme'}, name: "Extraits de malt"},
       {filter: {type:'flakes'}, name: "Flocons"},
       {filter: {type:'sugar'}, name: "Sucres"}
     ];

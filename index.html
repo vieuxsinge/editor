@@ -15,8 +15,10 @@
 
 <div class="container">
 
-  <div class="text-right">
-    <button class="btn btn-sm btn-danger" ng-click="clear()">Effacer</button>
+  <div class="btn-toolbar">
+    <div class="btn-group pull-right">
+      <button class="btn btn-sm btn-danger" ng-click="clear()">Effacer</button>
+    </div>
   </div>
 
   <div class="form-group">
@@ -81,14 +83,18 @@
 
   <div class="row">
     <div class="col-sm-10">
-      <table class="table" ng-show="recipe.fermentables.length > 0">
+      <table class="table table-bordered"
+             ng-show="recipe.fermentables.length > 0">
         <thead>
           <th></th>
           <th>Nom</th>
           <th>kg</th>
+          <th class="col-md-1"></th>
         </thead>
         <tbody>
-          <tr ng-repeat="f in recipe.fermentables | orderBy:'-weight'">
+          <tr ng-repeat="f in recipe.fermentables | orderBy:'-weight'"
+              ng-init="show=false" ng-mouseenter="show=true"
+              ng-mouseleave="show=false">
             <td>
               <span style="display: inline-block; width: 12px; height: 12px;"
                 ng-style="{'background-color': bh.srmToCss(bh.ebcToSrm(f.color))}"
@@ -100,6 +106,12 @@
             <td>
               <input type="number" step="any" class="form-control"
                      ng-model="f.weight" ng-model-options="{updateOn: 'blur'}" />
+            </td>
+            <td>
+              <button ng-click="remove(recipe.fermentables, f)" ng-show="show"
+                      class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-minus-sign"></span>
+              </button>
             </td>
           </tr>
         </tbody>
@@ -144,16 +156,19 @@
 
   <div class="row">
     <div class="col-sm-10">
-      <table class="table" ng-show="recipe.spices.length > 0">
+      <table class="table table-bordered" ng-show="recipe.spices.length > 0">
         <thead>
           <th>Nom</th>
           <th>%AA</th>
           <th>kg</th>
           <th>mn</th>
           <th>IBU</th>
+          <th class="col-md-1"></th>
         </thead>
         <tbody>
-          <tr ng-repeat="s in recipe.spices | orderBy:'-time'">
+          <tr ng-repeat="s in recipe.spices | orderBy:'-time'"
+              ng-init="show=false" ng-mouseenter="show=true"
+              ng-mouseleave="show=false">
             <td>
               <input class="form-control" ng-model="s.name" />
             </td>
@@ -167,6 +182,12 @@
               <input class="form-control" ng-model="s.time" ng-model-options="{updateOn: 'blur'}" />
             </td>
             <td>{{ spiceBitterness(s, calculations) | number:1 }}</td>
+            <td>
+              <button ng-click="remove(recipe.spices, s)" ng-show="show"
+                      class="btn btn-danger btn-xs">
+                <span class="glyphicon glyphicon-minus-sign"></span>
+              </button>
+            </td>
           </tr>
         </tbody>
       </table>
