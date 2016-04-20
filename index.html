@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html ng-app="brauhaus">
+<html>
 <head>
   <meta charset="utf-8">
-  <title>Web Beer Recipe Editor</title>
+  <title>Beer Editor</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
   <script src="https://rawgit.com/homebrewing/brauhausjs/master/dist/brauhaus.min.js"></script>
   <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
+  <script src="angular-brauhaus.js"></script>
+  <script src="beer-editor.js"></script>
   <script src="app.js"></script>
 </head>
-<body ng-controller="BrauhausController">
+<body ng-controller="BeerEditorController">
 
 <div class="container">
 
@@ -18,7 +20,7 @@
   </div>
 
   <div class="form-group">
-    <input placeholder="Titre" ng-model="data.name" class="form-control input-lg" />
+    <input placeholder="Titre" ng-model="recipe.name" class="form-control input-lg" />
   </div>
 
   <div class="row">
@@ -26,8 +28,17 @@
       <label>Volume final</label>
       <div class="form-group">
         <div class="input-group">
-          <input type="number" ng-model="data.batchSize" class="form-control" />
+          <input type="number" ng-model="recipe.batchSize" class="form-control" />
           <span class="input-group-addon">L</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <label>Durée de l'ébullition</label>
+      <div class="form-group">
+        <div class="input-group">
+          <input type="number" ng-model="recipe.boil_time" class="form-control"/>
+          <span class="input-group-addon">mn</span>
         </div>
       </div>
     </div>
@@ -35,8 +46,7 @@
       <label>Volume ébu</label>
       <div class="form-group">
         <div class="input-group">
-          <input type="number" ng-model="recipe.boilSize" class="form-control"
-                 disabled/>
+          <span ng-bind="calculations.boilSize" class="form-control" disabled></span>
           <span class="input-group-addon">L</span>
         </div>
       </div>
@@ -45,7 +55,7 @@
       <label>DI</label>
       <div class="form-group">
         <div class="input-group">
-          <span ng-bind="recipe.og.toFixed(3)"
+          <span ng-bind="calculations.og.toFixed(3)"
                 class="form-control" disabled></span>
           <span class="input-group-addon">SG</span>
         </div>
@@ -55,7 +65,7 @@
       <label>DF</label>
       <div class="form-group">
         <div class="input-group">
-          <span ng-bind="recipe.og.toFixed(3)"
+          <span ng-bind="calculations.og.toFixed(3)"
                 class="form-control" disabled></span>
           <span class="input-group-addon">SG</span>
         </div>
@@ -65,67 +75,69 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <div class="btn-group" uib-dropdown>
+      <span uib-dropdown>
         <button class="btn btn-warning" uib-dropdown-toggle>
           Malt <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" uib-dropdown-menu>
-          <li role="menuitem"><a href="#" ng-click="data.fermentables.push({
-              name: 'Extra pale extract',
-              weight: 4.0,
-              color: 2.5,
-              yield: 75.0
-          });">Pilsner</a></li>
+          <li role="menuitem" ng-repeat="f in fermentables">
+            <a href="#" ng-click="recipe.fermentables.push(f);"
+               ng-bind="f.name"></a></li>
         </ul>
-      </div>
-      <div class="btn-group" uib-dropdown>
+      </span>
+      <span uib-dropdown>
         <button class="btn btn-success" uib-dropdown-toggle>
           Houblon <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" uib-dropdown-menu>
-          <li role="menuitem"><a href="#" ng-click="data.spices.push({
-              name: 'Cascade hops',
-              weight: 0.1,
-              time: 60,
-              aa: 4.5,
-              form: 'pellet'
-          });">Cascade</a></li>
+          <li role="menuitem" ng-repeat="s in spices">
+            <a href="#" ng-click="recipe.spices.push(s);"
+               ng-bind="s.name"></a></li>
         </ul>
-      </div>
+      </span>
     </div>
   </div>
   
-  <table class="table" ng-show="data.fermentables.length + data.spices.length > 0">
+  <table class="table" ng-show="recipe.fermentables.length + recipe.spices.length > 0">
     <thead>
       <th>Nom</th>
       <th>Poids</th>
     </thead>
     <tbody>
-      <tr ng-repeat="f in data.fermentables">
+      <tr ng-repeat="f in recipe.fermentables">
         <td>{{ f.name }}</td>
         <td>{{ f.weight }}</td>
       </tr>
-      <tr ng-repeat="s in data.spices">
+      <tr ng-repeat="s in recipe.spices">
         <td>{{ s.name }}</td>
         <td>{{ s.weight }}</td>
       </tr>
     </tbody>
   </table>
 
-  <pre>{{ recipe | bhDisplay }}</pre>
-  <pre>{{ recipe }}</pre>
-
-  <h2>Paramètres</h2>
+  <h2>Équipement</h2>
 
   <label>Taux d'évaporation</label>
   <div class="form-group">
     <div class="input-group">
-      <span ng-bind="parameters.boil_rate" class="form-control"></span>
+      <input type="number" ng-model="equipment.boil_rate" class="form-control" />
       <span class="input-group-addon">%/h</span>
     </div>
   </div>
 
+  <pre>{{ calculations | bhDebug }}</pre>
+  <pre>{{ calculations }}</pre>
+  <pre>{{ fermentables }}</pre>
+  <pre><span ng-repeat="f in fermentables">{
+  "type": "{{f[0]}}",
+  "name": "{{f[1]}}",
+  "yield": {{Brauhaus.ppgToYield(f[2]).toFixed(0)}},
+  "color": {{Brauhaus.srmToEbc(f[3]).toFixed(0)}},
+},
+</span></pre>
+
 </div>
+
 
 </body>
 </html>
