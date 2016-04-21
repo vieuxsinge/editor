@@ -1,0 +1,23 @@
+input[type="number"] {
+  -moz-appearance:textfield;
+}
+
+input[type="number"]:focus {
+  -moz-appearance: number-input;
+}
+
+table.table > tbody > tr > td {
+  padding: 0;
+}
+
+.table input {
+  border-width: 0px;
+}
+
+.btn-toolbar {
+  margin-bottom: 15px;
+}
+
+* {
+  font-size: 14px;
+}

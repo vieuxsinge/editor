@@ -1,4 +1,4 @@
-<h2>Malts & sucres</h2>
+<h2>Malts</h2>
 
 <div class="btn-toolbar">
   <div class="btn-group">
@@ -27,9 +27,9 @@
     <table class="table table-bordered"
            ng-show="recipe.fermentables.length > 0">
       <thead>
-        <th></th>
-        <th>Nom</th>
-        <th>kg</th>
+        <th class="col-md-1"></th>
+        <th class="col-md-8">Nom</th>
+        <th class="col-md-2">kg</th>
         <th class="col-md-1"></th>
       </thead>
       <tbody>
@@ -37,9 +37,9 @@
             ng-init="show=false" ng-mouseenter="show=true"
             ng-mouseleave="show=false">
           <td>
-            <span style="display: inline-block; width: 12px; height: 12px;"
-              ng-style="{'background-color': bh.srmToCss(bh.ebcToSrm(f.color))}"
-              title="{{ f.color }} EBC"></span>
+            <span class="label" title="{{ f.color }} EBC"
+              style="display:inline-block; width: 2em; height: 2em;"
+              ng-style="{'background-color': bh.srmToCss(bh.ebcToSrm(f.color))}"></span>
           </td>
           <td>
             <input class="form-control" ng-model="f.name" />
@@ -68,7 +68,8 @@
       <dd>{{ calculations.fg | number:3 }}</dd>
       <dt>Couleur</dt>
       <dd>
-        <span style="display: inline-block; width: 12px; height: 12px;"
+        <span class="label"
+              style="display:inline-block; width: 2em; height: 2em;"
               ng-style="{'background-color': bh.srmToCss(calculations.color)}"></span>
         {{ bh.srmToEbc(calculations.color) | number:0 }} EBC
       </dd>
