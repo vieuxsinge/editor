@@ -24,7 +24,8 @@ angular.module('beerEditor', [])
       batchSize: 20,
       boilTime: 60,
       fermentables: [],
-      spices: []
+      spices: [],
+      yeast: []
     };
 
     $scope.clear = function() {
@@ -87,6 +88,19 @@ angular.module('beerEditor', [])
     $scope.spices = [];
     $http.get('spices.json').then(function(response) {
       $scope.spices = response.data;
+    });
+
+    $scope.yeastTypes = [
+      {filter: {type:'ale', name:'Wyeast'}, name: "Wyeast Ale"},
+      {filter: {type:'lager', name:'Wyeast'}, name: "Wyeast Lager"},
+      {filter: {type:'ale', name:'WLP'}, name: "WhiteLabs Ale"},
+      {filter: {type:'lager', name:'WLP'}, name: "WhiteLabs Lager"},
+      {filter: {type:'!other', format:'dry'}, name: "Levures sèches"},
+      {filter: {type:'other'}, name: "Autres bestioles"}
+    ];
+    $scope.yeast = [];
+    $http.get('yeast.json').then(function(response) {
+      $scope.yeast = response.data;
     });
 
   });
