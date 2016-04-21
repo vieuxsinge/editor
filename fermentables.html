@@ -1,0 +1,76 @@
+<h2>Malts & sucres</h2>
+
+<div class="btn-toolbar">
+  <div class="btn-group">
+    <button class="btn btn-default" ng-click="recipe.fermentables.push({});">
+      <span class="glyphicon glyphicon-plus-sign"></span>
+    </button>
+  </div>
+  <div class="btn-group" ng-repeat="type in fermentablesTypes" uib-dropdown>
+    <button class="btn btn-default" uib-dropdown-toggle>
+      <span class="glyphicon glyphicon-plus-sign"></span>
+      {{ type.name }} <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" uib-dropdown-menu>
+      <li ng-repeat="f in fermentables | filter:type.filter">
+        <a ng-click="recipe.fermentables.push(copy(f));">
+          <span style="display: inline-block; width: 12px; height: 12px;"
+            ng-style="{'background-color': bh.srmToCss(bh.ebcToSrm(f.color))}"></span>
+          {{ f.name }}
+        </a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-10">
+    <table class="table table-bordered"
+           ng-show="recipe.fermentables.length > 0">
+      <thead>
+        <th></th>
+        <th>Nom</th>
+        <th>kg</th>
+        <th class="col-md-1"></th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="f in recipe.fermentables | orderBy:'-weight'"
+            ng-init="show=false" ng-mouseenter="show=true"
+            ng-mouseleave="show=false">
+          <td>
+            <span style="display: inline-block; width: 12px; height: 12px;"
+              ng-style="{'background-color': bh.srmToCss(bh.ebcToSrm(f.color))}"
+              title="{{ f.color }} EBC"></span>
+          </td>
+          <td>
+            <input class="form-control" ng-model="f.name" />
+          </td>
+          <td>
+            <input type="number" step="any" class="form-control"
+                   ng-model="f.weight" ng-model-options="{updateOn: 'blur'}" />
+          </td>
+          <td>
+            <button ng-click="remove(recipe.fermentables, f)" ng-show="show"
+                    class="btn btn-danger btn-xs">
+              <span class="glyphicon glyphicon-minus-sign"></span>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col-md-2">
+    <dl>
+      <dt>Densité Initiale</dt>
+      <dd>{{ calculations.og | number:3 }}</dd>
+      <dt>Densité Finale</dt>
+      <dd>{{ calculations.fg | number:3 }}</dd>
+      <dt>Couleur</dt>
+      <dd>
+        <span style="display: inline-block; width: 12px; height: 12px;"
+              ng-style="{'background-color': bh.srmToCss(calculations.color)}"></span>
+        {{ bh.srmToEbc(calculations.color) | number:0 }} EBC
+      </dd>
+    </dl>
+  </div>
+</div>
