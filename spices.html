@@ -31,7 +31,7 @@
         <th class="col-md-1"></th>
       </thead>
       <tbody>
-        <tr ng-repeat="s in recipe.spices | orderBy:'-time'"
+        <tr ng-repeat="s in recipe.spices"
             ng-init="show=false" ng-mouseenter="show=true"
             ng-mouseleave="show=false">
           <td>
@@ -44,7 +44,8 @@
             <input type="number" step="any" class="form-control" ng-model="s.weight" />
           </td>
           <td>
-            <input class="form-control" ng-model="s.time" ng-model-options="{updateOn: 'blur'}" />
+            <input class="form-control" ng-model="s.time"
+                   ng-blur="recipe.spices = orderBy(['-time','aa','name'])" />
           </td>
           <td>{{ spiceBitterness(s, calculations) | number:1 }}</td>
           <td>

@@ -1,8 +1,9 @@
 angular.module('beerEditor', [])
-  .controller('BeerEditorController', function($scope, $http) {
+  .controller('BeerEditorController', function($scope, $http, $filter) {
 
     $scope.copy = angular.copy;
     $scope.bh = Brauhaus;
+    $scope.orderBy = $filter('orderBy');
 
     // Storage and default values
     $scope.autostore = function(key, defaultValue) {

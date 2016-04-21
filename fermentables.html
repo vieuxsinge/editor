@@ -33,7 +33,7 @@
         <th class="col-md-1"></th>
       </thead>
       <tbody>
-        <tr ng-repeat="f in recipe.fermentables | orderBy:'-weight'"
+        <tr ng-repeat="f in recipe.fermentables"
             ng-init="show=false" ng-mouseenter="show=true"
             ng-mouseleave="show=false">
           <td>
@@ -46,7 +46,8 @@
           </td>
           <td>
             <input type="number" step="any" class="form-control"
-                   ng-model="f.weight" ng-model-options="{updateOn: 'blur'}" />
+                   ng-model="f.weight"
+                   ng-blur="recipe.fermentables = orderBy(recipe.fermentables, ['-weight','color','name'])" />
           </td>
           <td>
             <button ng-click="remove(recipe.fermentables, f)" ng-show="show"
