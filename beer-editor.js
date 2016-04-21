@@ -16,6 +16,7 @@ angular.module('beerEditor', [])
     };
 
     var DEFAULT_EQUIPMENT = {
+      mashEfficiency: 75,
       boilRate: 10
     };
 
@@ -48,6 +49,7 @@ angular.module('beerEditor', [])
     var updateCalculations = function() {
       $scope.calculations = new Brauhaus.Recipe($scope.recipe);
       $scope.calculations.boilSize = boilSize($scope.recipe, $scope.equipment);
+      $scope.calculations.mashEfficiency = $scope.equipment.mashEfficiency;
       $scope.calculations.calculate();
       
       $scope.calculations.buToGu = $scope.calculations.buToGu || 0;
