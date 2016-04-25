@@ -64,6 +64,19 @@ angular.module('beerEditor', [])
         .bitterness('tinseth', calculations.og, calculations.batchSize));
     };
 
+    $scope.recipeWeight = function(recipe) {
+      var weight = 0;
+      angular.forEach(recipe.fermentables, function(item) {
+        weight += item.weight;
+      });
+      return weight;
+    };
+
+    $scope.numberOfIngredients = function(recipe) {
+      return recipe.fermentables.length + recipe.spices.length
+             + recipe.yeast.length;
+    };
+
     // Ingredients
     $scope.fermentablesTypes = [
       {filter: {type:'base'}, name: "Malts de base"},

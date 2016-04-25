@@ -10,14 +10,37 @@ table.table > tbody > tr > td {
   padding: 0;
 }
 
-.table input {
+.table .form-control {
   border-width: 0px;
+  border-radius: 0px;
+  box-shadow: none;
 }
 
-.btn-toolbar {
-  margin-bottom: 15px;
+.table .form-control:focus {
+  z-index: 10;
+  box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
 }
 
-* {
-  font-size: 14px;
+.input-lg {
+  font-size: 36px;
+  font-weight: bold;
+  height: 64px;
+}
+
+tr .action {
+  display: none;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+tr:hover .action {
+  display: inline-block;
+}
+
+.danger {
+  color: #d9534f;
+}
+
+.dropdown-menu {
+  cursor: pointer;
 }

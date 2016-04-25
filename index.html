@@ -15,42 +15,191 @@
 
 <div class="container">
 
-  <div class="btn-toolbar">
-    <div class="btn-group pull-right">
-      <button class="btn btn-sm btn-danger" ng-click="clear()">Effacer</button>
-    </div>
+  <div class="form-group text-right">
+    <button class="btn btn-sm btn-danger" ng-click="clear()">Effacer</button>
   </div>
 
   <div class="form-group">
     <input placeholder="Titre" ng-model="recipe.name" class="form-control input-lg" />
   </div>
 
-  <div class="row">
-    <div class="col-xs-6">
-      <label>Volume final</label>
-      <div class="form-group">
-        <div class="input-group">
-          <input type="number" step="any" ng-model="recipe.batchSize"
-                 class="form-control" />
-          <span class="input-group-addon">L</span>
-        </div>
-      </div>
+  <div class="form-group">
+    <input placeholder="Description" ng-model="recipe.description" class="form-control" />
+  </div>
+
+  <div class="form-group">
+    <div class="btn-group" uib-dropdown>
+      <button class="btn btn-default" uib-dropdown-toggle>
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Malts
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu>
+        <li ng-repeat="item in fermentables">
+          <a ng-click="recipe.fermentables.push(copy(item));">
+            <span class="glyphicon glyphicon-grain"
+                  ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+            {{ item.name }}
+          </a>
+        </li>
+      </ul>
     </div>
-    <div class="col-xs-6">
-      <label>Durée de l'ébullition</label>
-      <div class="form-group">
-        <div class="input-group">
-          <input type="number" step="any" ng-model="recipe.boilTime"
-                 class="form-control"/>
-          <span class="input-group-addon">mn</span>
-        </div>
-      </div>
+    
+    <div class="btn-group" uib-dropdown>
+      <button class="btn btn-default" uib-dropdown-toggle>
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Houblons
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu>
+        <li ng-repeat="item in spices">
+          <a ng-click="recipe.spices.push(copy(item));">
+            <span class="glyphicon glyphicon-leaf"
+                  style="color: #afa;"></span>
+            {{ item.name }}
+          </a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="btn-group" uib-dropdown>
+      <button class="btn btn-default" uib-dropdown-toggle>
+        <span class="glyphicon glyphicon-plus-sign"></span>
+        Levures
+        <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" uib-dropdown-menu>
+        <li ng-repeat="item in yeast">
+          <a ng-click="recipe.yeast.push(copy(item));">
+            <span class="glyphicon glyphicon-record"
+                  style="color: #aaa;"></span>
+            {{ item.name }}
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 
-  <ng-include src="'fermentables.html'"></ng-include>
-  <ng-include src="'spices.html'"></ng-include>
-  <ng-include src="'yeast.html'"></ng-include>
+  <div class="row">
+    <div class="col-sm-9">
+      <table class="table"
+             ng-show="numberOfIngredients(recipe) > 0">
+        <thead>
+          <th class="col-md-1"></th>
+          <th class="col-md-4">Nom</th>
+          <th class="col-md-2">%&alpha;</th>
+          <th class="col-md-2">Quantité</th>
+          <th class="col-md-2">%/IBU</th>
+          <th class="col-md-1"></th>
+        </thead>
+        <tbody>
+          <!-- Fermentables -->
+          <tr ng-repeat="item in recipe.fermentables">
+            <td>
+              <span class="form-control">
+                <span class="glyphicon glyphicon-grain"
+                      ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+              </span>
+            </td>
+            <td>
+              <input class="form-control" ng-model="item.name" />
+            </td>
+            <td></td>
+            <td>
+              <input type="number" step="any" class="form-control"
+                     ng-model="item.weight"
+                     ng-blur="recipe.fermentables = orderBy(recipe.fermentables, ['-weight','color','name'])" />
+            </td>
+            <td>
+              <span class="form-control">
+                {{ item.weight / recipeWeight(recipe) * 100 | number:0 }} %
+              </span>
+            </td>
+            <td>
+              <div class="form-control">
+                <a class="action danger" ng-click="remove(recipe.fermentables, item)">
+                  <span class="glyphicon glyphicon-remove-sign"></span>
+                </a>
+              </div>
+            </td>
+          </tr>
+          <!-- Spices -->
+          <tr ng-repeat="item in recipe.spices">
+            <td>
+              <span class="form-control">
+                <span class="glyphicon glyphicon-leaf" style="color: #afa;"></span>
+              </span>
+            </td>
+            <td>
+              <input class="form-control" ng-model="item.name" />
+            </td>
+            <td>
+              <span class="form-control">{{ item.aa }} %</span>
+            </td>
+            <td>
+              <input type="number" step="any" class="form-control"
+                     ng-model="item.weight"
+                     ng-blur="recipe.spices = orderBy(recipe.spices, ['-time','aa','name'])" />
+            </td>
+            <td>
+              <span class="form-control">
+                {{ spiceBitterness(item, calculations) | number:1 }} IBU
+              </span>
+            </td>
+            <td>
+              <div class="form-control">
+                <a class="action danger" ng-click="remove(recipe.spices, item)">
+                  <span class="glyphicon glyphicon-remove-sign"></span>
+                </a>
+              </div>
+            </td>
+          </tr>
+          <!-- Yeast -->
+          <tr ng-repeat="item in recipe.yeast">
+            <td>
+              <span class="form-control">
+                <span class="glyphicon glyphicon-record" style="color: #aaa;"></span>
+              </span>
+            </td>
+            <td>
+              <input class="form-control" ng-model="item.name" />
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>
+              <div class="form-control">
+                <a class="action danger" ng-click="remove(recipe.yeast, item)">
+                  <span class="glyphicon glyphicon-remove-sign"></span>
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="col-md-2">
+      <dl>
+        <dt>Volume Final</dt>
+        <dd>
+          <input type="number" step="any" ng-model="recipe.batchSize"
+                 class="form-control" /></dd>
+        <dt>Densité Initiale</dt>
+        <dd>{{ calculations.og | number:3 }}</dd>
+        <dt>Densité Finale</dt>
+        <dd>{{ calculations.fg | number:3 }}</dd>
+        <dt>Couleur</dt>
+        <dd>
+          <span class="label"
+                style="display:inline-block; width: 2em; height: 2em;"
+                ng-style="{'background-color': bh.srmToCss(calculations.color)}"></span>
+          {{ bh.srmToEbc(calculations.color) | number:0 }} EBC
+        </dd>
+      </dl>
+    </div>
+  </div>
+
   <ng-include src="'equipment.html'"></ng-include>
 
 </div>
