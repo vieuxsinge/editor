@@ -48,20 +48,29 @@ angular.module('beerEditor', [])
     };
 
     var updateCalculations = function() {
-      $scope.calculations = new Brauhaus.Recipe($scope.recipe);
-      $scope.calculations.boilSize = boilSize($scope.recipe, $scope.equipment);
-      $scope.calculations.mashEfficiency = $scope.equipment.mashEfficiency;
-      $scope.calculations.calculate();
+      var calculations = new Brauhaus.Recipe($scope.recipe);
+      calculations.boilSize = boilSize($scope.recipe, $scope.equipment);
+      calculations.mashEfficiency = $scope.equipment.mashEfficiency;
+
+      angular.forEach(calculations.spices, function(item) {
+        item.weight /= 1000;
+        console.log(item);
+      });
       
-      $scope.calculations.buToGu = $scope.calculations.buToGu || 0;
+      calculations.calculate();
+      
+      calculations.buToGu = calculations.buToGu || 0;
+
+      $scope.calculations = calculations;
     };
 
     $scope.$watch('recipe', updateCalculations, true);
     $scope.$watch('equipment', updateCalculations, true);
 
     $scope.spiceBitterness = function(spice, calculations) {
-      return (new Brauhaus.Spice(spice)
-        .bitterness('tinseth', calculations.og, calculations.batchSize));
+      var bhSpice = new Brauhaus.Spice(spice);
+      bhSpice.weight /= 1000;
+      return bhSpice.bitterness('tinseth', calculations.og, calculations.batchSize);
     };
 
     $scope.recipeWeight = function(recipe) {
@@ -91,6 +100,12 @@ angular.module('beerEditor', [])
       $scope.fermentables = response.data;
     });
 
+    $scope.addFermentable = function(recipe, fermentable) {
+      var item = angular.copy(fermentable);
+      item.weight = 0;
+      recipe.fermentables.push(item);
+    };
+
     $scope.spicesTypes = [
       {filter: {type:'hop', origin:'us'}, name: "Houblons Américains"},
       {filter: {type:'hop', origin:'uk'}, name: "Houblons Anglais"},
@@ -102,6 +117,19 @@ angular.module('beerEditor', [])
     $http.get('spices.json').then(function(response) {
       $scope.spices = response.data;
     });
+
+    $scope.spiceFormats = {pellet:'Pellet', cone:'Cône', other:'Autre'};
+    $scope.spiceMoments = {'first-wort':"Empâtage", boil:"Ébullition",
+                           late:"Fin d'ébullition", dry:"À froid"};
+
+    $scope.addSpice = function(recipe, spice) {
+      var item = angular.copy(spice);
+      item.weight = 0;
+      item.time = 0;
+      item.format = 'pellet';
+      item.moment = 'boil';
+      recipe.spices.push(item);
+    };
 
     $scope.yeastTypes = [
       {filter: {type:'ale', name:'Wyeast'}, name: "Wyeast Ale"},

@@ -1,9 +1,9 @@
-input[type="number"] {
-  -moz-appearance:textfield;
+body {
+  margin-top: 20px;
 }
 
-input[type="number"]:focus {
-  -moz-appearance: number-input;
+input[type="number"] {
+  -moz-appearance: textfield;
 }
 
 table.table > tbody > tr > td {
@@ -28,19 +28,24 @@ table.table > tbody > tr > td {
 }
 
 tr .action {
-  display: none;
+  visibility: hidden;
   text-decoration: none;
   cursor: pointer;
 }
 
 tr:hover .action {
-  display: inline-block;
-}
-
-.danger {
-  color: #d9534f;
+  visibility: visible;
 }
 
 .dropdown-menu {
   cursor: pointer;
 }
+
+.has-feedback .form-control {
+  padding-right: 36px;
+}
+
+.has-feedback .form-control-feedback {
+  width: 40px;
+}
+
