@@ -1,3 +1,3 @@
 angular.element(document).ready(function() {
-  angular.bootstrap(document, ['beerEditor', 'ui.bootstrap']);
+  angular.bootstrap(document, ['beerEditor', 'ui.bootstrap', 'bootstrapRange']);
 });

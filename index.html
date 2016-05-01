@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <title>Beer Editor</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="external/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
-  <script src="https://rawgit.com/homebrewing/brauhausjs/master/dist/brauhaus.min.js"></script>
-  <script src="https://rawgit.com/homebrewing/brauhaus-styles/master/dist/brauhaus-styles.min.js"></script>
-  <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-1.3.2.js"></script>
+  <script src="external/angular.min.js"></script>
+  <script src="external/brauhaus.min.js"></script>
+  <script src="external/brauhaus-styles.min.js"></script>
+  <script src="external/ui-bootstrap-tpls-1.3.2.js"></script>
   <script src="beer-editor.js"></script>
+  <script src="range.js"></script>
   <script src="app.js"></script>
 </head>
 <body ng-controller="BeerEditorController">
@@ -259,34 +260,66 @@
     </div>
 
     <div class="col-md-3">
-      <dl class="dl-horizontal">
-        <dt>Volume final</dt>
-        <dd>
-          <div class="has-feedback">
-            <input type="number" step="any" class="form-control text-right"
-                   ng-model="recipe.batchSize" />
-            <span class="form-control-feedback">L</span>
-          </div>
-        </dd>
-        <dt>Densité initiale</dt>
-        <dd>{{ calculations.og | number:3 }}</dd>
-        <dt>Densité finale</dt>
-        <dd>{{ calculations.fg | number:3 }}</dd>
-        <dt>Couleur</dt>
-        <dd>
-          <div class="has-feedback">
-            <span style="display:inline-block; width: 1em; height: 1em;"
-                  ng-style="{'background-color': bh.srmToCss(calculations.color)}"></span>
-            {{ bh.srmToEbc(calculations.color) | number:0 }} EBC
-          </div>
-        </dd>
-        <dt>Alcool</dt>
-        <dd>{{ calculations.abv | number:1 }}%</dd>
-        <dt>Amertume Absolue</dt>
-        <dd>{{ calculations.ibu | number:1 }} IBU</dd>
-        <dt>Amertume Relative</dt>
-        <dd>{{ calculations.buToGu | number:1 }} BU:GU</dd>
-      </dl>
+      <div class="form-group">
+        <label>Volume final</label>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="recipe.batchSize" />
+          <span class="form-control-feedback">L</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Densité initiale</label> {{ calculations.og | number:3 }}
+        <range min="1.000" max="1.150"
+               range-min="recipe.style.gu[0]"
+               range-max="recipe.style.gu[1]"
+               range-min-label="recipe.style.gu[0]|number:3"
+               range-max-label="recipe.style.gu[1]|number:3"
+               value="calculations.og"></range>
+      </div>
+      <div class="form-group">
+        <label>Densité finale</label> {{ calculations.fg | number:3 }}
+        <range min="1.000" max="1.150"
+               range-min="recipe.style.fg[0]"
+               range-max="recipe.style.fg[1]"
+               range-min-label="recipe.style.fg[0]|number:3"
+               range-max-label="recipe.style.fg[1]|number:3"
+               value="calculations.fg"></range>
+      </div>
+      <div class="form-group">
+        <label>Couleur</label> 
+        <span style="display:inline-block; width: 1em; height: 1em;" class="pull-right"
+              ng-style="{'background-color': bh.srmToCss(calculations.color)}"></span>
+        {{ bh.srmToEbc(calculations.color) | number:0 }} EBC
+        <range min="0" max="100"
+               range-min="recipe.style.srm[0]"
+               range-max="recipe.style.srm[1]"
+               range-min-label="bh.srmToEbc(recipe.style.srm[0]) | number:0"
+               range-max-label="bh.srmToEbc(recipe.style.srm[1]) | number:0"
+               value="calculations.color"></range>
+      </div>
+      <div class="form-group">
+        <label>Alcool</label> {{ calculations.abv | number:1 }}%
+        <range min="0" max="15"
+               range-min="recipe.style.abv[0]"
+               range-max="recipe.style.abv[1]"
+               range-min-label="recipe.style.abv[0] | number:1"
+               range-max-label="recipe.style.abv[1] | number:1"
+               value="calculations.abv"></range>
+      </div>
+      <div class="form-group">
+        <label>Amertume</label> {{ calculations.ibu | number:1 }} IBU
+        <range min="0" max="120"
+               range-min="recipe.style.ibu[0]"
+               range-max="recipe.style.ibu[1]"
+               range-min-label="recipe.style.ibu[0] | number:1"
+               range-max-label="recipe.style.ibu[1] | number:1"
+               value="calculations.ibu"></range>
+      </div>
+      <div class="form-group">
+        <label>Balance</label> {{ calculations.buToGu | number:1 }} BU:GU
+        <range min="0" max="3" value="calculations.buToGu"></range>
+      </div>
     </div>
   </div>
 

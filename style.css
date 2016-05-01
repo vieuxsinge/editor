@@ -49,3 +49,21 @@ tr:hover .action {
   width: 40px;
 }
 
+.progress {
+  position: relative;
+}
+
+.progress-bar-cursor {
+  position: absolute;
+  background-color: #000;
+  width: 2px;
+}
+
+.progress-bar-range {
+  background-color: #5cb85c;
+  opacity: 0.3;
+}
+
+.tooltip {
+  z-index: 1;
+}

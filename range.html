@@ -1,0 +1,9 @@
+<div class="progress">
+  <div class="progress-bar progress-bar-range"
+       ng-style="{width: rangeWidth+'%', 'margin-left': rangeLeft+'%'}"
+       ng-show="rangeMin"
+       uib-tooltip="{{rangeMinLabel+' - '+rangeMaxLabel}}"
+       tooltip-append-to-body="true"></div>
+  <div class="progress-bar progress-bar-cursor"
+       ng-style="{'margin-left': valueLeft+'%'}"></div>
+</div>
