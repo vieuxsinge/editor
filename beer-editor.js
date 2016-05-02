@@ -33,8 +33,8 @@ angular.module('beerEditor', [])
       $scope.equipment = angular.copy(DEFAULT_EQUIPMENT);
     };
     
-    $scope.remove = function(array, item) {
-      array.splice(item, 1);
+    $scope.remove = function(array, index) {
+      array.splice(index, 1);
     };
     
     $scope.autostore('recipe', DEFAULT_RECIPE);
