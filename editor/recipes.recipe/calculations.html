@@ -1,0 +1,59 @@
+<div class="form-group">
+  <label>Densité initiale</label>
+  <span class="pull-right">{{ calculations.og | number:3 }}</span>
+  <range min="1.000" max="1.150"
+         range-min="recipe.style.gu[0]"
+         range-max="recipe.style.gu[1]"
+         range-min-label="recipe.style.gu[0]|number:3"
+         range-max-label="recipe.style.gu[1]|number:3"
+         value="calculations.og"></range>
+</div>
+<div class="form-group">
+  <label>Densité finale</label>
+  <span class="pull-right">{{ calculations.fg | number:3 }}</span>
+  <range min="1.000" max="1.150"
+         range-min="recipe.style.fg[0]"
+         range-max="recipe.style.fg[1]"
+         range-min-label="recipe.style.fg[0]|number:3"
+         range-max-label="recipe.style.fg[1]|number:3"
+         value="calculations.fg"></range>
+</div>
+<div class="form-group">
+  <label>Couleur</label> 
+  <span class="pull-right">
+    <span style="display:inline-block; width: 1em; height: 1em;"
+          ng-style="{'background-color': bh.srmToCss(calculations.color)}"></span>
+    {{ bh.srmToEbc(calculations.color) | number:0 }} EBC
+  </span>
+  <range min="0" max="100"
+         range-min="recipe.style.srm[0]"
+         range-max="recipe.style.srm[1]"
+         range-min-label="bh.srmToEbc(recipe.style.srm[0]) | number:0"
+         range-max-label="bh.srmToEbc(recipe.style.srm[1]) | number:0"
+         value="calculations.color"></range>
+</div>
+<div class="form-group">
+  <label>Alcool</label>
+  <span class="pull-right">{{ calculations.abv | number:1 }}%</span>
+  <range min="0" max="15"
+         range-min="recipe.style.abv[0]"
+         range-max="recipe.style.abv[1]"
+         range-min-label="recipe.style.abv[0] | number:1"
+         range-max-label="recipe.style.abv[1] | number:1"
+         value="calculations.abv"></range>
+</div>
+<div class="form-group">
+  <label>Amertume</label>
+  <span class="pull-right">{{ calculations.ibu | number:1 }} IBU</span>
+  <range min="0" max="120"
+         range-min="recipe.style.ibu[0]"
+         range-max="recipe.style.ibu[1]"
+         range-min-label="recipe.style.ibu[0] | number:1"
+         range-max-label="recipe.style.ibu[1] | number:1"
+         value="calculations.ibu"></range>
+</div>
+<div class="form-group">
+  <label>Balance</label>
+  <span class="pull-right">{{ calculations.buToGu | number:1 }} BU:GU</span>
+  <range min="0" max="3" value="calculations.buToGu"></range>
+</div>

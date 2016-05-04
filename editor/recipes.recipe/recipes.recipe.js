@@ -1,5 +1,20 @@
-angular.module('beerEditor', [])
-  .controller('BeerEditorController', function($scope, $http, $filter) {
+angular.module('editor.recipes.recipe', ['ui.router', 'editor.mainMenu', 'editor.recipes', 'editor.range'])
+  .config(['$stateProvider', function($stateProvider) {
+    $stateProvider.state('recipes.recipe', {
+      url: '/:id',
+      views: {
+        '': {
+          templateUrl: 'editor/recipes.recipe/recipe.html',
+          controller: 'RecipesRecipeController'
+        },
+        'info': {
+          templateUrl: 'editor/recipes.recipe/calculations.html'
+        }
+      }
+    });
+  }])
+  .controller('RecipesRecipeController', ['$scope', '$http', '$filter',
+    function($scope, $http, $filter) {
 
     $scope.copy = angular.copy;
     $scope.bh = Brauhaus;
@@ -96,7 +111,7 @@ angular.module('beerEditor', [])
       {filter: {type:'sugar'}, name: "Sucres"}
     ];
     $scope.fermentables = [];
-    $http.get('fermentables.json').then(function(response) {
+    $http.get('resources/fermentables.json').then(function(response) {
       $scope.fermentables = response.data;
     });
 
@@ -114,7 +129,7 @@ angular.module('beerEditor', [])
       {filter: {type:'!hop', origin:'other'}, name: "Autres"}
     ];
     $scope.spices = [];
-    $http.get('spices.json').then(function(response) {
+    $http.get('resources/spices.json').then(function(response) {
       $scope.spices = response.data;
     });
 
@@ -140,9 +155,9 @@ angular.module('beerEditor', [])
       {filter: {type:'other'}, name: "Autres bestioles"}
     ];
     $scope.yeast = [];
-    $http.get('yeast.json').then(function(response) {
+    $http.get('resources/yeast.json').then(function(response) {
       $scope.yeast = response.data;
     });
 
-  });
+  }]);
 

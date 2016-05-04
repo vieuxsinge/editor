@@ -1,0 +1,247 @@
+<div class="row well">
+  <div class="col-md-12">
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="form-group">
+          <input placeholder="Titre" ng-model="recipe.name"
+                 class="form-control input-lg editable" required />
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+
+      <div class="col-md-8">
+        <div class="form-group">
+          <input placeholder="Description" class="form-control editable" required
+                 ng-model="recipe.description" />
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="btn-group btn-group-justified">
+          <div class="btn-group" uib-dropdown>
+            <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
+              <span class="pull-left">{{ recipe.style.name || 'Choisir un style' }}</span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+              <li ng-repeat-start="category in bh.getStyleCategories()"
+                  class="dropdown-header">{{ category }}</li>
+              <li ng-repeat-end ng-repeat="style in bh.getStyles(category)">
+                <a ng-click="recipe.style = bh.getStyle(category, style)">
+                  {{ style }}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <div class="btn-group" uib-dropdown>
+    <button class="btn btn-default" uib-dropdown-toggle>
+      <span class="glyphicon glyphicon-plus-sign"></span>
+      Malts
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" uib-dropdown-menu>
+      <li ng-repeat="item in fermentables">
+        <a ng-click="addFermentable(recipe, item)">
+          <span class="glyphicon glyphicon-grain"
+                ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+          {{ item.name }}
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="btn-group" uib-dropdown>
+    <button class="btn btn-default" uib-dropdown-toggle>
+      <span class="glyphicon glyphicon-plus-sign"></span>
+      Houblons
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" uib-dropdown-menu>
+      <li ng-repeat="item in spices">
+        <a ng-click="addSpice(recipe, item)">
+          <span class="glyphicon glyphicon-leaf"
+                style="color: #afa;"></span>
+          {{ item.name }}
+        </a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="btn-group" uib-dropdown>
+    <button class="btn btn-default" uib-dropdown-toggle>
+      <span class="glyphicon glyphicon-plus-sign"></span>
+      Levures
+      <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" uib-dropdown-menu>
+      <li ng-repeat="item in yeast">
+        <a ng-click="recipe.yeast.push(copy(item));">
+          <span class="glyphicon glyphicon-record"
+                style="color: #aaa;"></span>
+          {{ item.name }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<table class="table" ng-show="numberOfIngredients(recipe) > 0">
+  <thead>
+    <th class="col-md-1"></th>
+    <th class="col-md-4">Nom</th>
+    <th class="col-md-1">Format</th>
+    <th class="col-md-1 text-right">%&alpha;</th>
+    <th class="col-md-1">Moment</th>
+    <th class="col-md-1 text-right">Durée</th>
+    <th class="col-md-1 text-right">Quantité</th>
+    <th class="col-md-1 text-right">%/IBU</th>
+    <th class="col-md-1"></th>
+  </thead>
+  <tbody>
+    <!-- Fermentables -->
+    <tr ng-repeat="item in recipe.fermentables | orderBy:['-weight','color','name']">
+      <td>
+        <span class="form-control">
+          <span class="glyphicon glyphicon-grain"
+                ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+        </span>
+      </td>
+      <td>
+        <input class="form-control" ng-model="item.name"
+               ng-model-options="{ updateOn: 'blur' }" />
+      </td>
+      <td colspan="4"></td>
+      <td>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="item.weight" ng-model-options="{ updateOn: 'blur' }" />
+          <span class="form-control-feedback">kg</span>
+        </div>
+      </td>
+      <td>
+        <div class="has-feedback">
+          <span class="form-control text-right">
+            {{ ((item.weight / recipeWeight(recipe) * 100) || 0) | number:0 }}
+          </span>
+          <span class="form-control-feedback">%</span>
+        </div>
+      </td>
+      <td class="text-right">
+        <div class="form-control">
+          <a class="action text-danger" ng-click="remove(recipe.fermentables, $index)">
+            <span class="glyphicon glyphicon-remove-sign"></span>
+          </a>
+        </div>
+      </td>
+    </tr>
+    <!-- Spices -->
+    <tr ng-repeat="item in recipe.spices | orderBy:['-time','weight','name']">
+      <td>
+        <span class="form-control">
+          <span class="glyphicon glyphicon-leaf" style="color: #8c8;"></span>
+        </span>
+      </td>
+      <td>
+        <input class="form-control" ng-model="item.name"
+               ng-model-options="{ updateOn: 'blur' }" />
+      </td>
+      <td>
+        <div class="form-control">
+          <div class="btn-group btn-group-xs" uib-dropdown>
+            <button class="btn btn-default" uib-dropdown-toggle>
+              {{ spiceFormats[item.format] }}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+              <li ng-repeat="(format, name) in spiceFormats">
+                <a ng-click="item.format = format">{{ name }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="item.aa" ng-model-options="{ updateOn: 'blur' }" />
+          <span class="form-control-feedback">%</span>
+        </div>
+      </td>
+      <td>
+        <div class="form-control">
+          <div class="btn-group btn-group-xs" uib-dropdown>
+            <button class="btn btn-default" uib-dropdown-toggle>
+              {{ spiceMoments[item.moment] }}
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+              <li ng-repeat="(moment, name) in spiceMoments">
+                <a ng-click="item.moment = moment">{{ name }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="item.time" ng-model-options="{ updateOn: 'blur' }" />
+          <span class="form-control-feedback">mn</span>
+        </div>
+      </td>
+      <td>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="item.weight" ng-model-options="{ updateOn: 'blur' }" />
+          <span class="form-control-feedback">g</span>
+        </div>
+      </td>
+      <td>
+        <div class="has-feedback">
+          <span class="form-control text-right">
+            {{ spiceBitterness(item, calculations) | number:1 }}
+          </span>
+          <span class="form-control-feedback">IBU</span>
+        </div>
+      </td>
+      <td>
+        <div class="form-control text-right">
+          <a class="action text-danger" ng-click="remove(recipe.spices, $index)">
+            <span class="glyphicon glyphicon-remove-sign"></span>
+          </a>
+        </div>
+      </td>
+    </tr>
+    <!-- Yeast -->
+    <tr ng-repeat="item in recipe.yeast">
+      <td>
+        <span class="form-control">
+          <span class="glyphicon glyphicon-record" style="color: #aaa;"></span>
+        </span>
+      </td>
+      <td colspan="7">
+        <input class="form-control" ng-model="item.name"
+               ng-model-options="{ updateOn: 'blur' }" />
+      </td>
+      <td>
+        <div class="form-control text-right">
+          <a class="action text-danger" ng-click="remove(recipe.yeast, $index)">
+            <span class="glyphicon glyphicon-remove-sign"></span>
+          </a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+

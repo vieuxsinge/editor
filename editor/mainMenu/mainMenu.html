@@ -1,0 +1,10 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav" ng-controller="MainMenuController as menu">
+      <li ng-repeat="item in menu.items"
+          ng-class="{active: ((item.group || item.state) | includedByState)}">
+        <a ui-sref="{{ item.state }}">{{ item.name }}</a>
+      </li>
+    </ul>
+  </div>
+</div>

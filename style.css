@@ -1,3 +1,6 @@
+body {
+  padding-top: 50px;
+}
 
 input[type="number"] {
   -moz-appearance: textfield;
@@ -24,6 +27,17 @@ table.table > tbody > tr > td {
   height: 64px;
 }
 
+.editable:not(:focus).ng-valid-required {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  cursor: pointer;
+}
+
+.editable:not(:focus).ng-valid-required:hover {
+  text-decoration: underline;
+}
+
 tr .action {
   visibility: hidden;
   text-decoration: none;
@@ -46,6 +60,10 @@ tr:hover .action {
   width: 40px;
 }
 
+.form-horizontal .has-feedback .form-control-feedback {
+  right: 0;
+}
+
 .progress {
   position: relative;
 }
@@ -61,22 +79,38 @@ tr:hover .action {
   opacity: 0.3;
 }
 
-.tooltip {
-  z-index: 1;
-}
-
-.container-fluid {
-  height: 100%;
-}
-
 .sidebar {
   position: fixed;
-  background-color: black;
-  height: 100%;
-  padding-top: 30px;
+  top: 0;
+  bottom: 0;
+  padding-top: 70px;
+  border-radius: 0;
+  margin-bottom: 0;
 }
 
-.content {
-  margin-top: 20px;
+.sidebar .navbar-nav {
+  float: none;
+  margin: 0 -15px;
 }
 
+.sidebar .navbar-nav li {
+  float: none;
+}
+
+.sidebar-left {
+  left: 0;
+  border-width: 0 1px 0 0;
+}
+
+.sidebar-right {
+  right: 0;
+  border-width: 0 0 0 1px;
+}
+
+.row.well {
+  border-left-width: 0;
+  border-right-width: 0;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
