@@ -107,6 +107,14 @@ tr:hover .action {
   border-width: 0 0 0 1px;
 }
 
+.content {
+  padding-top: 20px;
+}
+
+.row.well:first-child {
+  margin-top: -20px;
+}
+
 .row.well {
   border-left-width: 0;
   border-right-width: 0;
