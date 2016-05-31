@@ -1,4 +1,4 @@
-angular.module('editor.range', ['ui.bootstrap'])
+angular.module('editor.directives.range', ['ui.bootstrap'])
   .directive('range', function() {
     return {
       restrict: 'E',
@@ -11,7 +11,7 @@ angular.module('editor.range', ['ui.bootstrap'])
         rangeMaxLabel: '=',
         value: '='
       },
-      templateUrl: 'editor/range/range.html',
+      templateUrl: 'editor/directives/range/range.html',
       link: function(scope) {
         var update = function() {
           var size = scope.max - scope.min;

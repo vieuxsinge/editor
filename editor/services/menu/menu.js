@@ -1,4 +1,4 @@
-angular.module('editor.menu', [])
+angular.module('editor.services.menu', [])
   .factory('Menu', function() {
     return function() {
     

@@ -1,59 +1,38 @@
-angular.module('editor.recipes.recipe', ['ui.router', 'editor.mainMenu', 'editor.recipes', 'editor.range'])
+angular.module('editor.views.recipes.recipe', ['ui.router',
+  'editor.services.recipes', 'editor.views.recipes', 'editor.directives.range'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
       url: '/:id',
       views: {
         '': {
-          templateUrl: 'editor/recipes.recipe/recipe.html',
+          templateUrl: 'editor/views/recipes.recipe/recipe.html',
           controller: 'RecipesRecipeController'
         },
         'info': {
-          templateUrl: 'editor/recipes.recipe/calculations.html'
+          templateUrl: 'editor/views/recipes.recipe/calculations.html'
         }
       }
     });
   }])
-  .controller('RecipesRecipeController', ['$scope', '$http', '$filter',
-    function($scope, $http, $filter) {
+  .controller('RecipesRecipeController', function($scope, $http, $filter,
+    $stateParams, recipes) {
 
     $scope.copy = angular.copy;
     $scope.bh = Brauhaus;
     $scope.orderBy = $filter('orderBy');
 
-    // Storage and default values
-    $scope.autostore = function(key, defaultValue) {
-      this[key] = localStorage[key] ? JSON.parse(localStorage[key])
-                                    : angular.copy(defaultValue);
-
-      this.$watch(key, function(value) {
-        localStorage[key] = JSON.stringify(value);
-      }, true);
-    };
-
-    var DEFAULT_EQUIPMENT = {
-      mashEfficiency: 75,
-      boilRate: 10
-    };
-
-    var DEFAULT_RECIPE = {
-      batchSize: 20,
-      boilTime: 60,
-      fermentables: [],
-      spices: [],
-      yeast: []
-    };
-
-    $scope.clear = function() {
-      $scope.recipe = angular.copy(DEFAULT_RECIPE);
-      $scope.equipment = angular.copy(DEFAULT_EQUIPMENT);
-    };
-    
     $scope.remove = function(array, index) {
       array.splice(index, 1);
     };
     
-    $scope.autostore('recipe', DEFAULT_RECIPE);
-    $scope.autostore('equipment', DEFAULT_EQUIPMENT);
+    $scope.equipment = {
+      mashEfficiency: 75,
+      boilRate: 10
+    };
+
+    recipes.get($stateParams.id).then(function(res) {
+      $scope.recipe = res.data;
+    });
 
     // Calculations
     var boilSize = function(recipe, equipment) {
@@ -80,7 +59,6 @@ angular.module('editor.recipes.recipe', ['ui.router', 'editor.mainMenu', 'editor
     };
 
     $scope.$watch('recipe', updateCalculations, true);
-    $scope.$watch('equipment', updateCalculations, true);
 
     $scope.spiceBitterness = function(spice, calculations) {
       var bhSpice = new Brauhaus.Spice(spice);
@@ -159,5 +137,5 @@ angular.module('editor.recipes.recipe', ['ui.router', 'editor.mainMenu', 'editor
       $scope.yeast = response.data;
     });
 
-  }]);
+  });
 

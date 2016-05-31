@@ -1,4 +1,4 @@
-angular.module('editor.mainMenu', ['editor.menu'])
+angular.module('editor.directives.mainMenu', ['editor.services.menu'])
   .factory('mainMenu', ['Menu', function(Menu) {
     return new Menu();
   }])
@@ -6,7 +6,7 @@ angular.module('editor.mainMenu', ['editor.menu'])
     this.items = mainMenu.items;
   }])
   .component('mainMenu', {
-    templateUrl: 'editor/mainMenu/mainMenu.html',
+    templateUrl: 'editor/directives/mainMenu/mainMenu.html',
     controller: 'MainMenuController'
   });
 

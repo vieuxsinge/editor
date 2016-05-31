@@ -1,8 +1,8 @@
 angular.module('editor', [
   'ui.router',
-  'editor.mainMenu',
-  'editor.recipes.last',
-  'editor.recipes.recipe'
+  'editor.directives.mainMenu',
+  'editor.views.recipes.last',
+  'editor.views.recipes.recipe'
 ])
 .config(['$urlRouterProvider', '$urlMatcherFactoryProvider',
          function($urlRouterProvider, $urlMatcherFactoryProvider) {

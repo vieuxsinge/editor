@@ -7,13 +7,13 @@
       </button>
     </div>
     <div class="form-group">
-      <button class="btn btn-danger" ng-click="clear()">
+      <button class="btn btn-danger" ng-click="recipes.clear()">
         <span class="glyphicon glyphicon-times-sign"></span>
         Effacer
       </button>
     </div>
     <ul class="nav navbar-nav">
-      <li ng-repeat="recipe in recipes" ui-sref-active-eq="active">
+      <li ng-repeat="recipe in recipes.records" ui-sref-active-eq="active">
         <a ui-sref="recipes.recipe({id: recipe.id})">
           {{ recipe.name || 'Nouvelle recette' }}
         </a>
