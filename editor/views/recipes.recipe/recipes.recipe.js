@@ -42,6 +42,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     };
 
     var updateCalculations = function() {
+      if( !$scope.recipe ) { return; }
+      if( !$scope.equipment ) { return; }
       var calculations = new Brauhaus.Recipe($scope.recipe);
       calculations.boilSize = boilSize($scope.recipe, $scope.equipment);
       calculations.mashEfficiency = $scope.equipment.mashEfficiency;
@@ -67,6 +69,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     };
 
     $scope.recipeWeight = function(recipe) {
+      if( !recipe ) { return 0; }
+
       var weight = 0;
       angular.forEach(recipe.fermentables, function(item) {
         weight += item.weight;
@@ -75,6 +79,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     };
 
     $scope.numberOfIngredients = function(recipe) {
+      if( !recipe ) { return 0; }
       return recipe.fermentables.length + recipe.spices.length
              + recipe.yeast.length;
     };
