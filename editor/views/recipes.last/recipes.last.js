@@ -16,10 +16,10 @@ angular.module('editor.views.recipes.last', ['ui.router',
   }])
   .controller('RecipesLastController', function($scope, $state, recipes) {
     $scope.$watch(
-      function() { return recipes.records.length; },
+      function() { return recipes.list.length; },
       function(len) {
         if( len <= 0 ) { return; }
-        $state.go('recipes.recipe', { id: recipes.records[0].id });
+        $state.go('recipes.recipe', { id: recipes.list[0].id });
       }
     );
   });

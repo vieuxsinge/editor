@@ -10,6 +10,10 @@ table.table > tbody > tr > td {
   padding: 0;
 }
 
+a {
+  cursor: pointer;
+}
+
 .table .form-control {
   border-width: 0px;
   border-radius: 0px;
