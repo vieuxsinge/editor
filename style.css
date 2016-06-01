@@ -79,7 +79,7 @@ tr:hover .action {
   opacity: 0.3;
 }
 
-.sidebar {
+.sidebar-fixed {
   position: fixed;
   top: 0;
   bottom: 0;
@@ -105,6 +105,12 @@ tr:hover .action {
 .sidebar-right {
   right: 0;
   border-width: 0 0 0 1px;
+}
+
+.content .sidebar {
+  padding-top: 20px;
+  margin-top: -20px;
+  margin-bottom: 0;
 }
 
 .content {
