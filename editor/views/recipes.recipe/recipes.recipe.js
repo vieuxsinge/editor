@@ -5,17 +5,32 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
       url: '/:id',
       views: {
         '': {
-          templateUrl: 'editor/views/recipes.recipe/recipe.html',
+          templateUrl: 'editor/views/recipes.recipe/layout.html',
           controller: 'RecipesRecipeController'
         },
-        'info': {
+        '@recipes.recipe': {
+          templateUrl: 'editor/views/recipes.recipe/recipe.html'
+        },
+        'info@recipes.recipe': {
           templateUrl: 'editor/views/recipes.recipe/calculations.html'
         }
       }
     });
   }])
   .controller('RecipesRecipeController', function($scope, $http, $filter,
-    $stateParams, recipes) {
+    $state, $stateParams, recipes) {
+
+    var recipeId = $scope.recipeId = $stateParams.id;
+
+    $scope.recipes = recipes;
+    
+    // Go to last recipe if current recipe disappear
+    $scope.$watch('(recipes.records | filter:{id:recipeId}).length',
+      function(len) {
+        if( len > 0 ) { return; }
+        $state.go('recipes.last');
+      }
+    );
 
     $scope.copy = angular.copy;
     $scope.bh = Brauhaus;
@@ -30,7 +45,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
       boilRate: 10
     };
 
-    recipes.get($stateParams.id).then(function(res) {
+    recipes.get(recipeId).then(function(res) {
       $scope.recipe = res.data;
     });
 
