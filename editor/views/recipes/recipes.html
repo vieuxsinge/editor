@@ -6,16 +6,13 @@
         Nouvelle recette
       </button>
     </div>
-    <div class="form-group">
-      <button class="btn btn-danger" ng-click="recipes.clear()">
-        <span class="glyphicon glyphicon-times-sign"></span>
-        Effacer
-      </button>
-    </div>
     <ul class="nav navbar-nav">
       <li ng-repeat="recipe in recipes.list" ui-sref-active-eq="active">
         <a ui-sref="recipes.recipe({id: recipe.id})">
-          {{ recipe.name || 'Nouvelle recette' }}
+          <button class="text-danger action pull-right" ng-click="remove(recipe); $event.stopPropagation();">
+            <span class="glyphicon glyphicon-remove-sign"></span>
+          </button>
+          {{ recipe.name || "Nouvelle recette" }}
         </a>
       </li>
     </ul>

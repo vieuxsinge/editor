@@ -1,0 +1,101 @@
+<div class="row well" ng-init="headerEdit=false">
+  <div class="col-md-12 recipe-header-display" ng-show="!headerEdit" ng-click="headerEdit=true">
+    <h1>
+      {{ recipe.name || "Nouvelle recette" }}
+      <small ng-bind="recipe.style.name"></small>
+    </h1>
+    <p class="text-muted" ng-bind="recipe.description"></p>
+  </div>
+  
+  <div ng-show="headerEdit">
+    <div class="col-md-12">
+      <div class="form-group">
+        <input placeholder="Titre" ng-model="recipe.name"
+               class="form-control input-lg" />
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="form-group">
+        <input placeholder="Description" class="form-control" required
+               ng-model="recipe.description" />
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="btn-group btn-group-justified">
+        <div class="btn-group" uib-dropdown>
+          <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
+            <span class="pull-left">{{ recipe.style.name || "Choisir un style" }}</span>
+            <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" uib-dropdown-menu>
+            <li ng-repeat-start="category in bh.getStyleCategories()"
+                class="dropdown-header">{{ category }}</li>
+            <li ng-repeat-end ng-repeat="style in bh.getStyles(category)">
+              <a ng-click="recipe.style = bh.getStyle(category, style)">
+                {{ style }}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-horizontal col-md-12">
+      <div class="form-group">
+        <label class="control-label col-md-4">Volume final</label>
+        <div class="has-feedback col-md-2">
+          <input type="number" class="form-control text-right" ng-model="recipe.batchSize" />
+          <span class="form-control-feedback">L</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-md-4">Efficacité</label>
+        <div class="has-feedback col-md-2">
+          <input type="number" class="form-control text-right" ng-model="recipe.efficiency" />
+          <span class="form-control-feedback">%</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-md-4">Durée de l'ébullition</label>
+        <div class="has-feedback col-md-2">
+          <input type="number" class="form-control text-right" ng-model="recipe.boilTime" />
+          <span class="form-control-feedback">mn</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-md-4">Pertes par ébullition</label>
+        <div class="has-feedback col-md-2">
+          <input type="number" class="form-control text-right" ng-model="recipe.boilRate" />
+          <span class="form-control-feedback">%/h</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-md-4">Pertes par refroidissement</label>
+        <div class="has-feedback col-md-2">
+          <input type="number" class="form-control text-right" ng-model="recipe.coolRate" />
+          <span class="form-control-feedback">%</span>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label class="control-label col-md-4">Pertes fixes après refroidissement</label>
+        <div class="has-feedback col-md-2">
+          <input type="number" class="form-control text-right" ng-model="recipe.lostVolume" />
+          <span class="form-control-feedback">L</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-12">
+      <button class="btn btn-default" ng-click="headerEdit=false">OK</button>
+    </div>
+
+  </div>
+</div>
+

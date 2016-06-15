@@ -11,7 +11,8 @@ angular.module('editor.views.recipes', ['ui.router', 'editor.services.recipes'])
     batchSize: 20,
     boilTime: 60,
     fermentables: [],
-    spices: [],
+    hops: [],
+    others: [],
     yeast: []
   })
   .controller('RecipesController', function($scope, recipes, DEFAULT_RECIPE) {
@@ -20,6 +21,11 @@ angular.module('editor.views.recipes', ['ui.router', 'editor.services.recipes'])
 
     $scope.create = function() {
       recipes.create(DEFAULT_RECIPE);
+    };
+
+    $scope.remove = function(recipe) {
+      var index = recipes.list.indexOf(recipe);
+      recipes.list.splice(index, 1);
     };
 
   });

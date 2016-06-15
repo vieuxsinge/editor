@@ -15,11 +15,16 @@ angular.module('editor.services.recipes', ['angular-kinto'])
         coolRate: 5,
         lostVolume: 10,
         
-        batchSize: 20,
+        batchSize: 50,
         boilTime: 60,
         fermentables: [],
-        spices: [],
-        yeast: []
+        hops: [],
+        others: [],
+        yeast: [],
+        
+        name: "Le Vieux Singe",
+        description: "On n'apprend pas au Vieux Singe à faire la grimace",
+        style: Brauhaus.getStyle('American Ale', 'American Pale Ale')
       }];
       this.create = function(recipe) {
         var data = angular.copy(recipe);
@@ -35,6 +40,10 @@ angular.module('editor.services.recipes', ['angular-kinto'])
           }
         });
         return recipe;
+      };
+
+      this.clear = function() {
+        self.list = [];
       };
     })();
   });
