@@ -26,10 +26,12 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     var recipeId = $scope.recipeId = $stateParams.id;
 
     $scope.recipes = recipes;
-    $scope.recipe = recipes.get(recipeId);
+    recipes.get(recipeId).then(function(recipe) {
+      $scope.recipe = recipe;
+    });
     
     // Go to last recipe if current recipe disappear
-    $scope.$watch('(recipes.list | filter:{id:recipeId}).length',
+    $scope.$watch('(recipesList | filter:{id:recipeId}).length',
       function(len) {
         if( len > 0 ) { return; }
         $state.go('recipes.last');
@@ -38,7 +40,6 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
 
     $scope.copy = angular.copy;
     $scope.bh = Brauhaus;
-    $scope.orderBy = $filter('orderBy');
 
     $scope.remove = function(array, item) {
       var index = array.indexOf(item);

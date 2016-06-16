@@ -1,5 +1,6 @@
 angular.module('editor.views.recipes.last', ['ui.router',
-  'editor.directives.mainMenu', 'editor.views.recipes'])
+  'editor.directives.mainMenu', 'editor.services.recipes',
+  'editor.views.recipes'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.last', {
       url: '',
@@ -14,13 +15,10 @@ angular.module('editor.views.recipes.last', ['ui.router',
   .run(['mainMenu', function(mainMenu) {
     mainMenu.add('Recettes', 'recipes.last', 'recipes');
   }])
-  .controller('RecipesLastController', function($scope, $state, recipes) {
-    $scope.$watch(
-      function() { return recipes.list.length; },
-      function(len) {
-        if( len <= 0 ) { return; }
-        $state.go('recipes.recipe', { id: recipes.list[0].id });
-      }
-    );
+  .controller('RecipesLastController', function($scope, $state) {
+    $scope.$watch('recipesList.length', function(len) {
+      if( len <= 0 ) { return; }
+      $state.go('recipes.recipe', {id: $scope.recipesList[0].id});
+    });
   });
 
