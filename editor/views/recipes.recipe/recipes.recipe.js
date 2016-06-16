@@ -40,7 +40,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     $scope.bh = Brauhaus;
     $scope.orderBy = $filter('orderBy');
 
-    $scope.remove = function(array, index) {
+    $scope.remove = function(array, item) {
+      var index = array.indexOf(item);
       array.splice(index, 1);
     };
 
