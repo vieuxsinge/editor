@@ -1,4 +1,4 @@
-angular.module('editor.services.recipes', ['angular-kinto'])
+angular.module('editor.services.recipes', [])
   .factory('recipes', function() {
     return new (function() {
       var self = this;
