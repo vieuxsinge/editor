@@ -24,7 +24,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
   .controller('RecipesRecipeController', function($scope, $http, $filter,
     $state, $stateParams, recipes, ingredients) {
 
-    var recipeId = $scope.recipeId = $stateParams.id;
+    var recipeId = $stateParams.id;
+    $scope.recipeId = $stateParams.id;
 
     $scope.recipes = recipes;
     
