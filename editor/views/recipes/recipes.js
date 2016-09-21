@@ -23,15 +23,10 @@ angular.module('editor.views.recipes', ['ui.router', 'editor.services.recipes'])
     DEFAULT_RECIPE) {
     
     $scope.recipes = recipes;
-    
-    recipes.list().then(function(items) {
-      $scope.recipesList = items;
-    });
 
     $scope.create = function() {
-      var newRecipe = angular.copy(DEFAULT_RECIPE);
-      recipes.save(newRecipe).then(function() {
-        $state.go('recipes.recipe', { id: newRecipe.id });
+      recipes.save(angular.copy(DEFAULT_RECIPE)).then(function(recipe) {
+        $state.go('recipes.recipe', { id: recipe.id });
       });
     };
 

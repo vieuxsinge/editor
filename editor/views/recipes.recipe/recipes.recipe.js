@@ -26,12 +26,19 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     var recipeId = $scope.recipeId = $stateParams.id;
 
     $scope.recipes = recipes;
-    recipes.get(recipeId).then(function(recipe) {
-      $scope.recipe = recipe;
-    });
     
+    recipes.get(recipeId).then(function(response) {
+      $scope.recipe = response.data;
+    });
+
+    // Save recipe on change
+    $scope.$watch('recipe', function(recipe) {
+      if( !recipe ) {return;}
+      recipes.save(recipe);
+    }, true);
+
     // Go to last recipe if current recipe disappear
-    $scope.$watch('(recipesList | filter:{id:recipeId}).length',
+    $scope.$watch('(recipes.items | filter:{id:recipeId}).length',
       function(len) {
         if( len > 0 ) { return; }
         $state.go('recipes.last');
