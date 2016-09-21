@@ -1,5 +1,6 @@
 angular.module('editor.views.recipes.recipe', ['ui.router',
-  'editor.services.recipes', 'editor.views.recipes', 'editor.directives.range'])
+  'editor.services.ingredients', 'editor.services.recipes',
+  'editor.views.recipes', 'editor.directives.range'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
       url: '/:id',
@@ -21,7 +22,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     });
   }])
   .controller('RecipesRecipeController', function($scope, $http, $filter,
-    $state, $stateParams, recipes) {
+    $state, $stateParams, recipes, ingredients) {
 
     var recipeId = $scope.recipeId = $stateParams.id;
 
@@ -122,25 +123,19 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     };
 
     // Ingredients
+    $scope.ingredients = ingredients;
+    
     $scope.numberOfIngredients = function(recipe) {
       if( !recipe ) { return 0; }
       return recipe.fermentables.length + recipe.hops.length
              + recipe.yeast.length + recipe.others.length;
     };
 
-    $http.get('resources/fermentables.json').then(function(response) {
-      $scope.fermentables = response.data;
-    });
-
     $scope.addFermentable = function(recipe, fermentable) {
       var item = angular.copy(fermentable);
       item.weight = 0;
       recipe.fermentables.push(item);
     };
-
-    $http.get('resources/hops.json').then(function(response) {
-      $scope.hops = response.data;
-    });
 
     $scope.hopFormats = {pellet:'Pellet', cone:'Cône', other:'Autre'};
     $scope.moments = {'first-wort':"Empâtage", boil:"Ébullition",
@@ -154,14 +149,6 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
       item.moment = 'boil';
       recipe.hops.push(item);
     };
-
-    $http.get('resources/yeast.json').then(function(response) {
-      $scope.yeast = response.data;
-    });
-
-    $http.get('resources/others.json').then(function(response) {
-      $scope.others = response.data;
-    });
 
     $scope.addOther = function(recipe, ingredient) {
       var item = angular.copy(ingredient);
