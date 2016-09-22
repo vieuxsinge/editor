@@ -2,7 +2,7 @@
   <div class="navbar navbar-default sidebar sidebar-fixed sidebar-left col-md-2">
     <div class="form-group">
       <button class="btn btn-primary" ng-click="create()">
-        <span class="glyphicon glyphicon-plus-sign"></span>
+        <span class="fa fa-plus-circle"></span>
         Nouvelle recette
       </button>
     </div>
@@ -10,7 +10,7 @@
       <li ng-repeat="r in recipes.items" ui-sref-active-eq="active">
         <a ui-sref="recipes.recipe({id: r.id})">
           <button class="text-danger action pull-right" ng-click="recipes.remove(r.id); $event.stopPropagation();">
-            <span class="glyphicon glyphicon-remove-sign"></span>
+            <span class="fa fa-times-circle"></span>
           </button>
           <span ng-if="r.name" ng-bind="r.name"></span>
           <em ng-if="!r.name">Sans nom</em>
