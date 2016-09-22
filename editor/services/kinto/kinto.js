@@ -1,5 +1,5 @@
 angular.module('editor.services.kinto', [])
-  .factory('$kinto', function($rootScope) {
+  .factory('$kinto', function($rootScope, $timeout) {
     return new (function() {
       var $kinto = this;
 
@@ -11,19 +11,21 @@ angular.module('editor.services.kinto', [])
 
         collection.needSync = true;
         var sync = function() {
-          collection.needSync = false;
-          return kcollection.sync({
-            remote: "https://kinto.notmyidea.org/v1",
-            headers: {Authorization: "Basic " + btoa("editor:pass")},
-            strategy: Kinto.syncStrategy.SERVER_WINS
-          }).catch(function(err) {
-            if (err.message.includes("flushed")) {
-              console.warning("New server or flushed server: syncing local data");
-              return kcollection.resetSyncStatus()
-                .then(function() { sync(); });
-            }
-            throw err;
-          });
+          return $timeout(function() {
+            collection.needSync = false;
+            return kcollection.sync({
+              remote: "https://kinto.notmyidea.org/v1",
+              headers: {Authorization: "Basic " + btoa("editor:pass")},
+              strategy: Kinto.syncStrategy.SERVER_WINS
+            }).catch(function(err) {
+              if (err.message.includes("flushed")) {
+                console.warning("New server or flushed server: syncing local data");
+                return kcollection.resetSyncStatus()
+                  .then(function() { sync(); });
+              }
+              throw err;
+            });
+          }, 3000);
         };
 
         $rootScope.$watch(function() { return collection.needSync; }, function(needSync) {
@@ -31,13 +33,14 @@ angular.module('editor.services.kinto', [])
           sync();
         });
 
-        var askForSync = function() {
+        var askForSync = function(res) {
           collection.needSync = true;
+          return res;
         };
 
-        var applyScope = function(resp) {
+        var applyScope = function(res) {
           $rootScope.$applyAsync();
-          return resp;
+          return res;
         };
 
         collection.list = function() {
