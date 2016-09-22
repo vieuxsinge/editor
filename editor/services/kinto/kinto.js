@@ -19,7 +19,6 @@ angular.module('editor.services.kinto', [])
             .then(applyScope);
         };
 
-        collection.items = [];
         var refreshItems = function(result) {
           return collection.list().then(function(response) {
             collection.items = response.data;

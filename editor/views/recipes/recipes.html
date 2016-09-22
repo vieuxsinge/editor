@@ -10,7 +10,11 @@
         Synchroniser
       </button>
     </div>
-    <ul class="nav navbar-nav">
+    <div ng-show="recipes.items == undefined" class="text-muted">
+      <span class="fa fa-spin fa-circle-o-notch"></span>
+      Chargement en cours...
+    </div>
+    <ul class="nav navbar-nav" ng-show="recipes.items.length != 0">
       <li ng-repeat="r in recipes.items" ui-sref-active-eq="active">
         <a ui-sref="recipes.recipe({id: r.id})">
           <button class="text-danger action pull-right" ng-click="recipes.remove(r.id); $event.stopPropagation();">
