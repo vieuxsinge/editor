@@ -1,5 +1,5 @@
 angular.module('editor.views.recipes.recipe', ['ui.router',
-  'editor.services.ingredients', 'editor.services.recipes',
+  'editor.data.ingredients', 'editor.data.recipes',
   'editor.views.recipes', 'editor.directives.range'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
@@ -30,14 +30,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     $scope.recipes = recipes;
     
     recipes.get(recipeId).then(function(response) {
-      $scope.recipe = response.data;
+      $scope.recipe = response;
     });
-
-    // Save recipe on change
-    $scope.$watch('recipe', function(recipe) {
-      if( !recipe ) {return;}
-      recipes.save(recipe);
-    }, true);
 
     // Go to last recipe if current recipe disappear
     $scope.$watch('(recipes.items | filter:{id:recipeId}).length',
@@ -125,7 +119,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
 
     // Ingredients
     $scope.ingredients = ingredients;
-    
+
     $scope.numberOfIngredients = function(recipe) {
       if( !recipe ) { return 0; }
       return recipe.fermentables.length + recipe.hops.length

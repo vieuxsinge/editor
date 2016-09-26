@@ -1,5 +1,5 @@
 angular.module('editor.views.recipes.last', ['ui.router',
-  'editor.directives.mainMenu', 'editor.services.recipes',
+  'editor.directives.mainMenu', 'editor.data.recipes',
   'editor.views.recipes'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.last', {

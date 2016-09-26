@@ -5,14 +5,6 @@
         <span class="fa fa-plus-circle"></span>
         Nouvelle recette
       </button>
-      <button class="btn btn-success" ng-click="recipes.sync()" ng-disabled="recipes.synchronizing">
-        <span class="fa fa-refresh" ng-class="{'fa-spin':recipes.synchronizing}"></span>
-        Synchroniser
-      </button>
-    </div>
-    <div ng-show="recipes.items == undefined" class="text-muted">
-      <span class="fa fa-spin fa-circle-o-notch"></span>
-      Chargement en cours...
     </div>
     <ul class="nav navbar-nav" ng-show="recipes.items.length != 0">
       <li ng-repeat="r in recipes.items" ui-sref-active-eq="active">

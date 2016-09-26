@@ -13,7 +13,7 @@
           <div class="col-sm-3">
             <h3>Malt/Extrait</h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.fermentables | filter:{name:query} | orderBy:'color'">
+              <li ng-repeat="item in ingredients.fermentables.items | filter:{name:query} | orderBy:'color'">
                 <a ng-click="addFermentable(recipe, item)">
                   <span class="glyphicon glyphicon-grain"
                         ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
@@ -25,7 +25,7 @@
           <div class="col-sm-3">
             <h3>Houblon</h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.hops | filter:{name:query}">
+              <li ng-repeat="item in ingredients.hops.items | filter:{name:query}">
                 <a ng-click="addHop(recipe, item)">
                   <span class="glyphicon glyphicon-leaf"
                         style="color: #8c8;"></span>
@@ -37,7 +37,7 @@
           <div class="col-sm-3">
             <h3>Levure</h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.yeast | filter:{name:query}">
+              <li ng-repeat="item in ingredients.yeast.items | filter:{name:query}">
                 <a ng-click="recipe.yeast.push(copy(item));">
                   {{ item.name }}
                 </a>
@@ -47,7 +47,7 @@
           <div class="col-sm-3">
             <h3>Autre</h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.others | filter:{name:query}">
+              <li ng-repeat="item in ingredients.others.items | filter:{name:query}">
                 <a ng-click="addOther(recipe, item)">
                   {{ item.name }}
                 </a>
