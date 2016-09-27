@@ -1,16 +1,13 @@
-angular.module('editor.services.collection', [])
-  .factory('Collection', function($q) {
+angular.module('editor.services.collection', ['uuid4'])
+  .factory('Collection', function($q, uuid4) {
     return function() {
       var collection = this;
-
-      var ids = 0;
 
       collection.items = [];
 
       collection.create = function(item) {
         if( !item.id ) {
-          item.id = ids.toString();
-          ids++;
+          item.id = uuid4.generate();
         }
         collection.items.push(item);
         return $q.resolve(item);
@@ -28,9 +25,8 @@ angular.module('editor.services.collection', [])
         if( !found ) {
           return $q.reject();
         }
-        else {
-          return $q.resolve(found);
-        }
+
+        return $q.resolve(found);
       };
 
       collection.remove = function(id) {

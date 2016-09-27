@@ -1,6 +1,6 @@
 angular.module('editor', [
   'ui.router',
-  'editor.services.persistence',
+  'editor.conf.persistence',
   'editor.directives.mainMenu',
   'editor.views.recipes.last',
   'editor.views.recipes.recipe'
