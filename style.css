@@ -106,15 +106,13 @@ tr:hover .action, .nav li:hover .action {
 .sidebar-left {
   left: 0;
   border-width: 0 1px 0 0;
+  padding-top: 70px;
 }
 
 .sidebar-right {
   right: 0;
-  border-width: 0 0 0 1px;
-}
-
-.sidebar {
-  padding-top: 70px;
+  border-width: 0 0 1px 1px;
+  padding-top: 20px;
 }
 
 .content .sidebar {
