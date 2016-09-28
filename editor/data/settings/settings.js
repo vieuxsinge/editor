@@ -12,6 +12,22 @@ angular.module('editor.data.settings', [])
         hops: [],
         others: [],
         yeast: []
+      },
+      fermentable: {
+        name: '',
+        color: 0,
+        yield: 100
+      },
+      hop: {
+        name: '',
+        aa: 5
+      },
+      yeast: {
+        name: '',
+        attenuation: 75
+      },
+      other: {
+        name: ''
       }
     }
   });

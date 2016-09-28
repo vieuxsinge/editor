@@ -4,7 +4,13 @@ angular.module('editor.data.ingredients', ['editor.services.collection'])
       fermentables: new Collection(),
       hops: new Collection(),
       yeast: new Collection(),
-      others: new Collection()
+      others: new Collection(),
+      i18n: {
+        fermentables: "Malts/Extraits",
+        hops: "Houblons",
+        yeast: "Levures",
+        others: "Autres"
+      }
     };
   })
   .run(function($http, ingredients) {

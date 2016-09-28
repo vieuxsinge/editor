@@ -1,0 +1,37 @@
+<div class="form-group">
+  <button class="btn btn-primary"
+          ng-click="ingredients.yeast.create(copy(settings.defaults.yeast))">
+    <span class="fa fa-plus-circle"></span>
+    Nouvelle levure
+  </button>
+</div>
+
+<table class="table">
+  <thead>
+    <th class="col-md-10">Nom</th>
+    <th class="col-md-1 text-right">Atténuation</th>
+    <th class="col-md-1"></th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in ingredients.yeast.items | orderBy:['name'] track by item.id">
+      <td>
+        <input class="form-control" ng-model="item.name"
+               ng-model-options="{ updateOn: 'blur' }">
+      </td>
+      <td>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="item.attenuation" ng-model-options="{ updateOn: 'blur' }">
+          <span class="form-control-feedback">%</span>
+        </div>
+      </td>
+      <td class="text-right">
+        <div class="form-control">
+          <a class="action text-danger" ng-click="remove(ingredients.yeast.items, item)">
+            <span class="glyphicon glyphicon-remove-sign"></span>
+          </a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,51 @@
+<div class="form-group">
+  <button class="btn btn-primary"
+          ng-click="ingredients.fermentables.create(copy(settings.defaults.fermentable))">
+    <span class="fa fa-plus-circle"></span>
+    Nouveau malt/extrait
+  </button>
+</div>
+
+<table class="table">
+  <thead>
+    <th class="col-md-1"></th>
+    <th class="col-md-8">Nom</th>
+    <th class="col-md-1 text-right">Couleur</th>
+    <th class="col-md-1 text-right">Extrait</th>
+    <th class="col-md-1"></th>
+  </thead>
+  <tbody>
+    <tr ng-repeat="item in ingredients.fermentables.items | orderBy:['color','name'] track by item.id">
+      <td>
+        <span class="form-control">
+          <span class="glyphicon glyphicon-grain"
+                ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+        </span>
+      </td>
+      <td>
+        <input class="form-control" ng-model="item.name" ng-model-options="{ updateOn: 'blur' }">
+      </td>
+      <td>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="item.color" ng-model-options="{ updateOn: 'blur' }">
+          <span class="form-control-feedback">EBC</span>
+        </div>
+      </td>
+      <td>
+        <div class="has-feedback">
+          <input type="number" step="any" class="form-control text-right"
+                 ng-model="item.yield" ng-model-options="{ updateOn: 'blur' }">
+          <span class="form-control-feedback">%</span>
+        </div>
+      </td>
+      <td class="text-right">
+        <div class="form-control">
+          <a class="action text-danger" ng-click="remove(ingredients.fermentables.items, item)">
+            <span class="glyphicon glyphicon-remove-sign"></span>
+          </a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

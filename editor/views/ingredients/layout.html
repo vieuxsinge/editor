@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="navbar navbar-default sidebar sidebar-fixed sidebar-left col-md-2">
+    <ul class="nav navbar-nav">
+      <li ng-repeat="(categoryName, category) in ingredients" ui-sref-active-eq="active">
+        <a ui-state="'ingredients.' + categoryName">
+          {{ ingredients.i18n[categoryName] }}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="content col-md-offset-2 col-md-10" ui-view></div>
+</div>
