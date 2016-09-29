@@ -203,3 +203,12 @@ tr:hover .action, .nav li:hover .action {
 .recipe-header-display h1 {
   margin-top: 0;
 }
+
+.dl-horizontal dt {
+  text-align: left;
+  width: 200px;
+}
+
+.dl-horizontal dd {
+  margin-left: 220px;
+}
