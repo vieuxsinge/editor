@@ -1,6 +1,6 @@
 <div class="form-group">
   <label>Densité initiale</label>
-  <span class="pull-right">{{ calculations.og | number:3 }}</span>
+  <span class="pull-right">{{ calculations.og | density }}</span>
   <range min="1.000" max="1.150"
          range-min="recipe.style.gu[0]"
          range-max="recipe.style.gu[1]"
@@ -10,7 +10,7 @@
 </div>
 <div class="form-group">
   <label>Densité finale</label>
-  <span class="pull-right">{{ calculations.fg | number:3 }}</span>
+  <span class="pull-right">{{ calculations.fg | density }}</span>
   <range min="1.000" max="1.150"
          range-min="recipe.style.fg[0]"
          range-max="recipe.style.fg[1]"
@@ -23,7 +23,7 @@
   <span class="pull-right">
     <span style="display:inline-block; width: 1em; height: 1em;"
           ng-style="{'background-color': bh.srmToCss(calculations.color)}"></span>
-    {{ bh.srmToEbc(calculations.color) | number:0 }} EBC
+    {{ bh.srmToEbc(calculations.color) | color }}
   </span>
   <range min="0" max="100"
          range-min="recipe.style.srm[0]"
@@ -34,7 +34,7 @@
 </div>
 <div class="form-group">
   <label>Alcool</label>
-  <span class="pull-right">{{ calculations.abv | number:1 }}%</span>
+  <span class="pull-right">{{ calculations.abv | abv }}</span>
   <range min="0" max="15"
          range-min="recipe.style.abv[0]"
          range-max="recipe.style.abv[1]"
@@ -44,7 +44,7 @@
 </div>
 <div class="form-group">
   <label>Amertume</label>
-  <span class="pull-right">{{ calculations.ibu | number:1 }} IBU</span>
+  <span class="pull-right">{{ calculations.ibu | ibu }}</span>
   <range min="0" max="120"
          range-min="recipe.style.ibu[0]"
          range-max="recipe.style.ibu[1]"

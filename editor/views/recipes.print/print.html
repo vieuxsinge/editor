@@ -12,23 +12,23 @@
       <h2>Profil estimé</h2>
       <dl class="dl-horizontal">
         <dt>Volume final</dt>
-        <dd>{{ recipe.batchSize | number:1 }} L</dd>
+        <dd>{{ recipe.batchSize | volume }}</dd>
         <dt>Volume d'ébullition</dt>
-        <dd>{{ calculations.boilSize | number:1 }} L</dd>
+        <dd>{{ calculations.boilSize | volume }}</dd>
         <dt>Densité avant l'ébullition</dt>
-        <dd>{{ earlyOg(calculations) | number:3 }}</dd>
+        <dd>{{ earlyOg(calculations) | density }}</dd>
         <dt>Densité originale</dt>
-        <dd>{{ calculations.og | number:3 }}</dd>
+        <dd>{{ calculations.og | density }}</dd>
         <dt>Densité finale</dt>
-        <dd>{{ calculations.fg | number:3 }}</dd>
+        <dd>{{ calculations.fg | density }}</dd>
         <dt>Efficacité</dt>
-        <dd>{{ recipe.efficiency | number:1 }} %</dd>
+        <dd>{{ recipe.efficiency | efficiency }}</dd>
         <dt>Alcool</dt>
-        <dd>{{ calculations.abv | number:1 }} %</dd>
+        <dd>{{ calculations.abv | abv }}</dd>
         <dt>Amertume</dt>
-        <dd>{{ calculations.ibu | number:1 }} IBU</dd>
+        <dd>{{ calculations.ibu | ibu }}</dd>
         <dt>Couleur</dt>
-        <dd>{{ calculations.color | number:0 }} EBC</dd>
+        <dd>{{ calculations.color | color }}</dd>
       </dl>
     </div>
     <div class="col-sm-6">

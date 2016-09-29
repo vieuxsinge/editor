@@ -1,6 +1,6 @@
 angular.module('editor.views.recipes.recipe', ['ui.router',
   'editor.data.ingredients', 'editor.data.recipes',
-  'editor.views.recipes', 'editor.directives.range'])
+  'editor.views.recipes', 'editor.directives.range', 'editor.filters.recipe'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
       url: '/:id',
