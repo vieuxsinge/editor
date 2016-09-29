@@ -1,7 +1,8 @@
-angular.module('editor.views.recipes', ['ui.router', 'editor.data.recipes',
-  'editor.data.settings'])
+angular.module('editor.views.recipes', ['ui.router', 'editor.views.layout',
+  'editor.data.recipes', 'editor.data.settings'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes', {
+      parent: 'layout',
       url: '/recipes',
       abstract: true,
       templateUrl: 'editor/views/recipes/recipes.html',
