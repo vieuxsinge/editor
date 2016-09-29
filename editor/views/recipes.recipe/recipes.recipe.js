@@ -31,15 +31,16 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     
     recipes.get(recipeId).then(function(response) {
       $scope.recipe = response;
-    });
+      
+      // Go to last recipe if current recipe disappear
+      $scope.$watch('(recipes.items | filter:{id:recipe.id}).length',
+        function(len) {
+          if( len > 0 ) { return; }
+          $state.go('recipes.last');
+        }
+      );
 
-    // Go to last recipe if current recipe disappear
-    $scope.$watch('(recipes.items | filter:{id:recipeId}).length',
-      function(len) {
-        if( len > 0 ) { return; }
-        $state.go('recipes.last');
-      }
-    );
+    });
 
     $scope.copy = angular.copy;
     $scope.bh = Brauhaus;
