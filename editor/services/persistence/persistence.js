@@ -89,6 +89,24 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
 
         };
 
+        service.persistObject = function(object, name) {
+          var storage = {
+            get: function(state) {
+              return $q.when(kbucket.getData())
+                .then(function(res) {
+                  return res[name];
+                });
+            },
+            set: function(value, state) {
+              var data = {};
+              data[name] = value;
+              return $q.when(kbucket.setData(data));
+            }
+          };
+
+          watchAndSave(object, storage);
+        };
+
         service.persistCollection = function(collection, name) {
           var popById = function(items, id) {
             var found;
