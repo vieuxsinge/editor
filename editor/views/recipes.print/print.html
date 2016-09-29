@@ -1,0 +1,179 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h1>{{ recipe.name }} <small ng-if="recipe.style.name">{{ recipe.style.name }}</small></h1>
+      <p class="text-muted" ng-bind="recipe.description"></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-6">
+      <h2>Profil estimé</h2>
+      <dl class="dl-horizontal">
+        <dt>Volume final</dt>
+        <dd>{{ recipe.batchSize | number:1 }} L</dd>
+        <dt>Volume d'ébullition</dt>
+        <dd>{{ calculations.boilSize | number:1 }} L</dd>
+        <dt>Densité avant l'ébullition</dt>
+        <dd>{{ earlyOg(calculations) | number:3 }}</dd>
+        <dt>Densité originale</dt>
+        <dd>{{ calculations.og | number:3 }}</dd>
+        <dt>Densité finale</dt>
+        <dd>{{ calculations.fg | number:3 }}</dd>
+        <dt>Efficacité</dt>
+        <dd>{{ recipe.efficiency | number:1 }} %</dd>
+        <dt>Alcool</dt>
+        <dd>{{ calculations.abv | number:1 }} %</dd>
+        <dt>Amertume</dt>
+        <dd>{{ calculations.ibu | number:1 }} IBU</dd>
+        <dt>Couleur</dt>
+        <dd>{{ calculations.color | number:0 }} EBC</dd>
+      </dl>
+    </div>
+    <div class="col-sm-6">
+      <h2>Profil observé</h2>
+      <dl class="dl-horizontal">
+        <dt>Volume final</dt>
+        <dd>...............</dd>
+        <dt>Volume d'ébullition</dt>
+        <dd>...............</dd>
+        <dt>Densité avant l'ébullition</dt>
+        <dd>...............</dd>
+        <dt>Densité originale</dt>
+        <dd>...............</dd>
+        <dt>Densité finale</dt>
+        <dd>...............</dd>
+        <dt>Efficacité</dt>
+        <dd>...............</dd>
+        <dt>Alcool</dt>
+        <dd>...............</dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>Ingrédients</h2>
+
+      <p ng-hide="numberOfIngredients(recipe) > 0">Aucun ingrédient</p>
+
+      <table class="table" ng-show="numberOfIngredients(recipe) > 0">
+        <thead>
+          <th class="col-sm-1"></th>
+          <th class="col-sm-3">Nom</th>
+          <th class="col-sm-1">Format</th>
+          <th class="col-sm-1 text-right">%&alpha;</th>
+          <th class="col-sm-2">Moment</th>
+          <th class="col-sm-1 text-right">Durée</th>
+          <th class="col-sm-1 text-right">Quantité</th>
+          <th class="col-sm-1 text-right">%/IBU</th>
+        </thead>
+        <tbody>
+          <!-- Fermentables -->
+          <tr ng-repeat="item in recipe.fermentables track by item.id | orderBy:['-weight','color','name']">
+            <td>
+              <span class="form-control">
+                <span class="glyphicon glyphicon-grain"
+                      ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+              </span>
+            </td>
+            <td>
+              <span class="form-control" ng-bind="item.name"></span>
+            </td>
+            <td colspan="4"></td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right" ng-bind="item.weight"></span>
+                <span class="form-control-feedback">kg</span>
+              </div>
+            </td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right">
+                  {{ ((item.weight * item.yield / recipeWeightYielded(recipe)) || 0) | number:0 }}
+                </span>
+                <span class="form-control-feedback">%</span>
+              </div>
+            </td>
+          </tr>
+          <!-- Hops -->
+          <tr ng-repeat="item in recipe.hops track by item.id | orderBy:['-time','weight','name']">
+            <td>
+              <span class="form-control">
+                <span class="glyphicon glyphicon-leaf" style="color: #8c8;"></span>
+              </span>
+            </td>
+            <td>
+              <span class="form-control" ng-bind="item.name"></span>
+            </td>
+            <td>
+              <span class="form-control" ng-bind="hopFormats[item.format]"></span>
+            </td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right" ng-bind="item.aa"></span>
+                <span class="form-control-feedback">%</span>
+              </div>
+            </td>
+            <td>
+              <span class="form-control" ng-bind="moments[item.moment]"></span>
+            </td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right" ng-bind="item.time"></span>
+                <span class="form-control-feedback">mn</span>
+              </div>
+            </td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right" ng-bind="item.weight"></span>
+                <span class="form-control-feedback">g</span>
+              </div>
+            </td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right">
+                  {{ bitterness(item, calculations) || 0 | number:1 }}
+                </span>
+                <span class="form-control-feedback">IBU</span>
+              </div>
+            </td>
+          </tr>
+          <!-- Others -->
+          <tr ng-repeat="item in recipe.others track by item.id | orderBy:['-time','weight','name']">
+            <td></td>
+            <td colspan="3">
+              <span class="form-control" ng-bind="item.name"></span>
+            </td>
+            <td>
+              <span class="form-control" ng-bind="moments[item.moment]"></span>
+            </td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right" ng-bind="item.time"></span>
+                <span class="form-control-feedback">mn</span>
+              </div>
+            </td>
+            <td>
+              <div class="has-feedback">
+                <span class="form-control text-right" ng-bind="item.weight"></span>
+                <span class="form-control-feedback">g</span>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+          <!-- Yeast -->
+          <tr ng-repeat="item in recipe.yeast track by item.id">
+            <td></td>
+            <td colspan="7">
+              <span class="form-control" ng-bind="item.name"></span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
