@@ -136,9 +136,8 @@ tr:hover .action, .nav li:hover .action {
   padding-right: 0;
 }
 
-.ingredients-menu .dropdown-menu {
+.yamm {
   position: relative;
-  width: 100%;
 }
 
 .ingredients-column {
