@@ -20,6 +20,16 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
         var service = this;
 
         var states = [];
+        var createState = function() {
+          var state = {
+            initialized: false,
+            needSave: false,
+            saving: false,
+            saved: null
+          };
+          states.push(state);
+          return state;
+        };
 
         var initDeferred = $q.defer();
 
@@ -36,29 +46,22 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
           return initDeferred.promise;
         };
 
-        service.persist = function(collection, name) {
-
-          var state = {
-            initialized: false,
-            needSave: false,
-            saving: false,
-            saved: null
-          };
-          states.push(state);
-
-          var kcollection = kbucket.collection(name);
-
+        var watchAndSave = function(object, storage) {
+          var state = createState();
+          
           // Populate
-          kcollection.listRecords().then(function(res) {
-            $rootScope.$apply(function() {
-              collection.items = res.data;
+          storage.get(state).then(function(value) {
+            $rootScope.$applyAsync(function() {
+              if( value ) {
+                angular.copy(value, object);
+              }
               state.initialized = true;
             });
           });
-
-          // Save changes
+          
+          // Watch and save
           $rootScope.$watch(function() {
-            return collection.items;
+            return object;
           }, function(newItems, oldItems) {
             if( newItems === oldItems ) { return; }
             state.needSave = true;
@@ -70,14 +73,23 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
             if( !value ) { return; }
             state.saving = true;
             state.needSave = false;
-            save(collection.items).catch(function() {
-              $log.error("Failed to save, retrying...");
-              state.needSave = true;
-            }).finally(function() {
-              state.saving = false;
-            });
+            var toBeSaved = angular.copy(object);
+            storage.set(toBeSaved, state)
+              .catch(function() {
+                $log.error("Failed to save, retrying...");
+                state.needSave = true;
+              })
+              .then(function() {
+                state.saved = toBeSaved;
+              })
+              .finally(function() {
+                state.saving = false;
+              });
           });
 
+        };
+
+        service.persistCollection = function(collection, name) {
           var popById = function(items, id) {
             var found;
             angular.forEach(items, function(item) {
@@ -106,23 +118,29 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
             return res;
           };
 
-          var save = function(items) {
-            var toBeSaved = angular.copy(items);
-            var changes = detectChanges(toBeSaved, state.saved);
+          var kcollection = kbucket.collection(name);
 
-            return $q.when(kcollection.batch(function(batch) {
-              angular.forEach(changes.added, function(item) {
-                batch.createRecord(item);
-              });
-              angular.forEach(changes.removed, function(item) {
-                batch.deleteRecord(item.id);
-              });
-              angular.forEach(changes.modified, function(item) {
-                batch.updateRecord(item);
-              });
-            })).then(function() {
-              state.saved = toBeSaved;
-            });
+          var storage = {
+            get: function(state) {
+              return $q.when(kcollection.listRecords())
+                .then(function(res) {
+                  return res.data;
+                });
+            },
+            set: function(value, state) {
+              var changes = detectChanges(value, state.saved);
+              return $q.when(kcollection.batch(function(batch) {
+                angular.forEach(changes.added, function(item) {
+                  batch.createRecord(item);
+                });
+                angular.forEach(changes.removed, function(item) {
+                  batch.deleteRecord(item.id);
+                });
+                angular.forEach(changes.modified, function(item) {
+                  batch.updateRecord(item);
+                });
+              }));
+            }
           };
 
           // Patch collection
@@ -133,7 +151,9 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
             });
           };
 
+          watchAndSave(collection.items, storage);
         };
+
       })();
     };
   });

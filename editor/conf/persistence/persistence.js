@@ -10,10 +10,10 @@ angular.module('editor.conf.persistence', ['editor.services.persistence',
   })
   .run(function(persistence, recipes, ingredients) {
   
-    persistence.persist(recipes, 'recipes');
-    persistence.persist(ingredients.fermentables, 'fermentables');
-    persistence.persist(ingredients.hops, 'hops');
-    persistence.persist(ingredients.yeast, 'yeast');
-    persistence.persist(ingredients.others, 'others');
+    persistence.persistCollection(recipes, 'recipes');
+    persistence.persistCollection(ingredients.fermentables, 'fermentables');
+    persistence.persistCollection(ingredients.hops, 'hops');
+    persistence.persistCollection(ingredients.yeast, 'yeast');
+    persistence.persistCollection(ingredients.others, 'others');
   
   });
