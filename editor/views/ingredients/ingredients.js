@@ -1,7 +1,8 @@
-angular.module('editor.views.ingredients', ['ui.router', 'editor.data.settings',
-  'editor.data.ingredients'])
+angular.module('editor.views.ingredients', ['ui.router', 'editor.views.layout',
+  'editor.data.settings', 'editor.data.ingredients'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('ingredients', {
+      parent: 'layout',
       url: '/ingredients',
       abstract: true,
       templateUrl: 'editor/views/ingredients/layout.html',
