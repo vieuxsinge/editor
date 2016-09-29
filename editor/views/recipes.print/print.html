@@ -1,13 +1,19 @@
-<div class="container">
+<div class="container" ng-init="ellipsis = '..............................'">
 
   <div class="row">
+  
     <div class="col-sm-12">
-      <h1>{{ recipe.name }} <small ng-if="recipe.style.name">{{ recipe.style.name }}</small></h1>
-      <p class="text-muted" ng-bind="recipe.description"></p>
+      <h1>
+        {{ recipe.name }}
+        <small ng-if="recipe.style.name">{{ recipe.style.name }}</small>
+      </h1>
+      <dl class="dl-horizontal">
+        <dt>Date de brassage</dt>
+        <dd>{{ ellipsis }}</dd>
+      </dl>
+      <p style="white-space: pre-line;" class="text-muted" ng-bind="recipe.description"></p>
     </div>
-  </div>
-
-  <div class="row">
+    
     <div class="col-sm-6">
       <h2>Profil estimé</h2>
       <dl class="dl-horizontal">
@@ -31,28 +37,27 @@
         <dd>{{ calculations.color | color }}</dd>
       </dl>
     </div>
+    
     <div class="col-sm-6">
       <h2>Profil observé</h2>
       <dl class="dl-horizontal">
         <dt>Volume final</dt>
-        <dd>...............</dd>
+        <dd>{{ ellipsis }}</dd>
         <dt>Volume d'ébullition</dt>
-        <dd>...............</dd>
+        <dd>{{ ellipsis }}</dd>
         <dt>Densité avant l'ébullition</dt>
-        <dd>...............</dd>
+        <dd>{{ ellipsis }}</dd>
         <dt>Densité originale</dt>
-        <dd>...............</dd>
+        <dd>{{ ellipsis }}</dd>
         <dt>Densité finale</dt>
-        <dd>...............</dd>
+        <dd>{{ ellipsis }}</dd>
         <dt>Efficacité</dt>
-        <dd>...............</dd>
+        <dd>{{ ellipsis }}</dd>
         <dt>Alcool</dt>
-        <dd>...............</dd>
+        <dd>{{ ellipsis }}</dd>
       </dl>
     </div>
-  </div>
-
-  <div class="row">
+    
     <div class="col-sm-12">
       <h2>Ingrédients</h2>
 

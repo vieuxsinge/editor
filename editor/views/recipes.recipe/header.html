@@ -4,7 +4,7 @@
       {{ recipe.name || "Nouvelle recette" }}
       <small ng-bind="recipe.style.name"></small>
     </h1>
-    <p class="text-muted" ng-bind="recipe.description"></p>
+    <p style="white-space: pre-line;" class="text-muted" ng-bind="recipe.description"></p>
   </div>
   
   <div ng-show="headerEdit">
@@ -17,8 +17,8 @@
 
     <div class="col-md-8">
       <div class="form-group">
-        <input placeholder="Description" class="form-control" required
-               ng-model="recipe.description" />
+        <textarea placeholder="Description" class="form-control" required
+               ng-model="recipe.description"></textarea>
       </div>
     </div>
 
