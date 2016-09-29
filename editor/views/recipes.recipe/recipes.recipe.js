@@ -21,8 +21,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
       }
     });
   }])
-  .controller('RecipesRecipeController', function($scope, $http, $filter,
-    $state, $stateParams, recipes, ingredients) {
+  .controller('RecipesRecipeController', function($scope, $state, $stateParams,
+    recipes, ingredients) {
 
     var recipeId = $stateParams.id;
     $scope.recipeId = $stateParams.id;
@@ -88,6 +88,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     };
 
     $scope.earlyOg = function(calculations) {
+      if( !calculations ) { return; }
       var earlyOg = 1.0;
       angular.forEach(calculations.fermentables, function(fermentable) {
         addition = fermentable.addition();

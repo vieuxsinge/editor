@@ -65,6 +65,10 @@
   </a>
 </div>
 
+<p class="alert alert-info" ng-hide="numberOfIngredients(recipe) > 0">
+  Aucun ingrédient
+</p>
+
 <table class="table" ng-show="numberOfIngredients(recipe) > 0">
   <thead>
     <th class="col-md-1"></th>
