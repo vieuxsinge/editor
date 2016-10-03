@@ -83,7 +83,7 @@
   </thead>
   <tbody>
     <!-- Fermentables -->
-    <tr ng-repeat="item in recipe.fermentables track by item.id | orderBy:['-weight','color','name']">
+    <tr ng-repeat="item in recipe.fermentables | orderBy:['-weight','color','name'] track by $index">
       <td>
         <span class="form-control">
           <span class="glyphicon glyphicon-grain"
@@ -119,7 +119,7 @@
       </td>
     </tr>
     <!-- Hops -->
-    <tr ng-repeat="item in recipe.hops track by item.id | orderBy:['-time','weight','name']">
+    <tr ng-repeat="item in recipe.hops | orderBy:['-time','weight','name'] track by $index">
       <td>
         <span class="form-control">
           <span class="glyphicon glyphicon-leaf" style="color: #8c8;"></span>
@@ -197,7 +197,7 @@
       </td>
     </tr>
     <!-- Others -->
-    <tr ng-repeat="item in recipe.others track by item.id | orderBy:['-time','weight','name']">
+    <tr ng-repeat="item in recipe.others | orderBy:['-time','weight','name'] track by $index">
       <td></td>
       <td colspan="3">
         <input class="form-control" ng-model="item.name"
@@ -242,7 +242,7 @@
       </td>
     </tr>
     <!-- Yeast -->
-    <tr ng-repeat="item in recipe.yeast track by item.id">
+    <tr ng-repeat="item in recipe.yeast track by $index">
       <td></td>
       <td colspan="7">
         <input class="form-control" ng-model="item.name"
