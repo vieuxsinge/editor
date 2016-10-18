@@ -1,6 +1,7 @@
 angular.module('editor.views.recipes.recipe', ['ui.router',
   'editor.data.ingredients', 'editor.data.recipes',
-  'editor.views.recipes', 'editor.directives.range', 'editor.filters.recipe'])
+  'editor.services.calculator', 'editor.views.recipes',
+  'editor.directives.range', 'editor.filters.recipe'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
       url: '/:id',
@@ -22,17 +23,19 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     });
   }])
   .controller('RecipesRecipeController', function($scope, $state, $stateParams,
-    recipes, ingredients) {
+    recipes, ingredients, calculator) {
+
+    $scope.bh = Brauhaus;
+    $scope.calc = calculator;
 
     var recipeId = $stateParams.id;
     $scope.recipeId = $stateParams.id;
 
-    $scope.recipes = recipes;
-    
     recipes.get(recipeId).then(function(response) {
       $scope.recipe = response;
       
       // Go to last recipe if current recipe disappear
+      $scope.recipes = recipes;
       $scope.$watch('(recipes.items | filter:{id:recipe.id}).length',
         function(len) {
           if( len > 0 ) { return; }
@@ -43,80 +46,9 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     });
 
     $scope.copy = angular.copy;
-    $scope.bh = Brauhaus;
-
     $scope.remove = function(array, item) {
       var index = array.indexOf(item);
       array.splice(index, 1);
-    };
-
-    // Calculations
-    var boilSize = function(recipe) {
-      var cooledVolume = recipe.batchSize + recipe.lostVolume;
-      var postBoilVolume = cooledVolume / (1 - recipe.coolRate/100);
-      return postBoilVolume / (1 - recipe.boilRate/100 * recipe.boilTime/60);
-    };
-
-    var updateCalculations = function(recipe) {
-      if( !recipe ) { return; }
-      var calculations = new Brauhaus.Recipe({
-        batchSize: recipe.batchSize + recipe.lostVolume,
-        boilSize: boilSize(recipe),
-        mashEfficiency: recipe.efficiency,
-        fermentables: recipe.fermentables,
-        spices: recipe.hops,
-        yeast: recipe.yeast
-      });
-
-      angular.forEach(calculations.spices, function(item) {
-        item.weight /= 1000;
-      });
-      
-      calculations.calculate();
-      
-      calculations.buToGu = calculations.buToGu || 0;
-
-      $scope.calculations = calculations;
-    };
-
-    $scope.$watch('recipe', updateCalculations, true);
-
-    $scope.bitterness = function(hop, calculations) {
-      var bhSpice = new Brauhaus.Spice(hop);
-      bhSpice.weight /= 1000;
-      return bhSpice.bitterness('tinseth', $scope.earlyOg(calculations), calculations.batchSize);
-    };
-
-    $scope.earlyOg = function(calculations) {
-      if( !calculations ) { return; }
-      var earlyOg = 1.0;
-      angular.forEach(calculations.fermentables, function(fermentable) {
-        addition = fermentable.addition();
-        if( addition == 'steep' ) {
-          efficiency = calculations.steepEfficiency / 100.0;
-        }
-        else if( addition == 'mash' ) {
-          efficiency = calculations.mashEfficiency / 100.0;
-        }
-        else {
-          efficiency = 1.0;
-        }
-
-        if( !fermentable.late ) {
-          earlyOg += fermentable.gu(calculations.boilSize) * efficiency / 1000.0;
-        }
-      });
-      return earlyOg;
-    };
-
-    $scope.recipeWeightYielded = function(recipe) {
-      if( !recipe ) { return 0; }
-
-      var weightYielded = 0;
-      angular.forEach(recipe.fermentables, function(item) {
-        weightYielded += item.weight * item.yield / 100;
-      });
-      return weightYielded;
     };
 
     // Ingredients
@@ -128,15 +60,30 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
              + recipe.yeast.length + recipe.others.length;
     };
 
+    $scope.fermentableMoments = {
+      steep:  "Trempage",
+      mash:   "Empâtage",
+      boil:   "Ébullition"
+    };
+
     $scope.addFermentable = function(recipe, fermentable) {
       var item = angular.copy(fermentable);
       item.weight = 0;
       recipe.fermentables.push(item);
     };
 
-    $scope.hopFormats = {pellet:'Pellet', cone:'Cône', other:'Autre'};
-    $scope.moments = {'first-wort':"Empâtage", boil:"Ébullition",
-                         late:"Fin d'ébullition", dry:"À froid"};
+    $scope.hopFormats = {
+      pellet: "Pellet",
+      cone:   "Cône"
+    };
+
+    $scope.hopMoments = {
+      mash:           "Empâtage",
+      'first-wort':   "Premier jus",
+      boil:           "Ébullition",
+      late:           "Fin d'ébullition",
+      dry:            "À froid"
+    };
 
     $scope.addHop = function(recipe, hop) {
       var item = angular.copy(hop);
@@ -146,6 +93,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
       item.moment = 'boil';
       recipe.hops.push(item);
     };
+
+    $scope.otherMoments = $scope.hopMoments;
 
     $scope.addOther = function(recipe, ingredient) {
       var item = angular.copy(ingredient);

@@ -13,47 +13,75 @@
       </dl>
       <p style="white-space: pre-line;" class="text-muted" ng-bind="recipe.description"></p>
     </div>
-    
+
+    <div class="col-sm-12">
+      <h2>Profil</h2>
+    </div>
+
     <div class="col-sm-6">
-      <h2>Profil estimé</h2>
+      <h4>Estimé</h4>
       <dl class="dl-horizontal">
         <dt>Volume final</dt>
-        <dd>{{ recipe.batchSize | volume }}</dd>
-        <dt>Volume d'ébullition</dt>
-        <dd>{{ calculations.boilSize | volume }}</dd>
-        <dt>Densité avant l'ébullition</dt>
-        <dd>{{ earlyOg(calculations) | density }}</dd>
+        <dd>{{ recipe.finalVolume | volume }}</dd>
         <dt>Densité originale</dt>
-        <dd>{{ calculations.og | density }}</dd>
+        <dd>{{ calc.originalGravity(recipe) | density }}</dd>
         <dt>Densité finale</dt>
-        <dd>{{ calculations.fg | density }}</dd>
-        <dt>Efficacité</dt>
-        <dd>{{ recipe.efficiency | efficiency }}</dd>
+        <dd>{{ calc.finalGravity(recipe) | density }}</dd>
         <dt>Alcool</dt>
-        <dd>{{ calculations.abv | abv }}</dd>
+        <dd>{{ calc.abv(recipe) | abv }}</dd>
         <dt>Amertume</dt>
-        <dd>{{ calculations.ibu | ibu }}</dd>
+        <dd>{{ calc.recipeBitterness(recipe) | ibu }}</dd>
         <dt>Couleur</dt>
-        <dd>{{ calculations.color | color }}</dd>
+        <dd>{{ calc.recipeColor(recipe) | color }}</dd>
       </dl>
     </div>
     
     <div class="col-sm-6">
-      <h2>Profil observé</h2>
+      <h4>Observé</h4>
       <dl class="dl-horizontal">
         <dt>Volume final</dt>
-        <dd>{{ ellipsis }}</dd>
-        <dt>Volume d'ébullition</dt>
-        <dd>{{ ellipsis }}</dd>
-        <dt>Densité avant l'ébullition</dt>
         <dd>{{ ellipsis }}</dd>
         <dt>Densité originale</dt>
         <dd>{{ ellipsis }}</dd>
         <dt>Densité finale</dt>
         <dd>{{ ellipsis }}</dd>
+        <dt>Alcool</dt>
+        <dd>{{ ellipsis }}</dd>
+      </dl>
+    </div>
+    
+    <div class="col-sm-12">
+      <h2>Brassage</h2>
+    </div>
+
+    <div class="col-sm-6">
+      <h4>Estimé</h4>
+      <dl class="dl-horizontal">
+        <dt>Points de densité</dt>
+        <dd>{{ calc.recipeGravityPoints(recipe) | number:0 }}</dd>
+        <dt>Efficacité</dt>
+        <dd>{{ recipe.mashEfficiency | efficiency }}</dd>
+        <dt>Volume avant ébullition</dt>
+        <dd>{{ calc.preBoilVolume(recipe) | volume }}</dd>
+        <dt>Densité avant ébullition</dt>
+        <dd>{{ calc.preBoilGravity(recipe) | density }}</dd>
+        <dt>Volume après ébullition</dt>
+        <dd>{{ calc.postBoilVolume(recipe) | volume }}</dd>
+      </dl>
+    </div>
+    
+    <div class="col-sm-6">
+      <h4>Observé</h4>
+      <dl class="dl-horizontal">
+        <dt>Points de densité</dt>
+        <dd>{{ ellipsis }}</dd>
         <dt>Efficacité</dt>
         <dd>{{ ellipsis }}</dd>
-        <dt>Alcool</dt>
+        <dt>Volume avant ébullition</dt>
+        <dd>{{ ellipsis }}</dd>
+        <dt>Densité avant ébullition</dt>
+        <dd>{{ ellipsis }}</dd>
+        <dt>Volume après ébullition</dt>
         <dd>{{ ellipsis }}</dd>
       </dl>
     </div>
@@ -80,13 +108,17 @@
             <td>
               <span class="form-control">
                 <span class="glyphicon glyphicon-grain"
-                      ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+                      ng-style="{'color': (item.color | cssColor)}"></span>
               </span>
             </td>
             <td>
               <span class="form-control" ng-bind="item.name"></span>
             </td>
-            <td colspan="4"></td>
+            <td colspan="2"></td>
+            <td>
+              <span class="form-control" ng-bind="fermentableMoments[item.moment]"></span>
+            </td>
+            <td></td>
             <td>
               <div class="has-feedback">
                 <span class="form-control text-right" ng-bind="item.weight"></span>
@@ -96,7 +128,7 @@
             <td>
               <div class="has-feedback">
                 <span class="form-control text-right">
-                  {{ ((item.weight * item.yield / recipeWeightYielded(recipe)) || 0) | number:0 }}
+                  {{ calc.fermentableGravityPercent(recipe, item) | number:0 }}
                 </span>
                 <span class="form-control-feedback">%</span>
               </div>
@@ -122,7 +154,7 @@
               </div>
             </td>
             <td>
-              <span class="form-control" ng-bind="moments[item.moment]"></span>
+              <span class="form-control" ng-bind="hopMoments[item.moment]"></span>
             </td>
             <td>
               <div class="has-feedback">
@@ -139,7 +171,7 @@
             <td>
               <div class="has-feedback">
                 <span class="form-control text-right">
-                  {{ bitterness(item, calculations) || 0 | number:1 }}
+                  {{ calc.hopBitterness(recipe, item) | number:1 }}
                 </span>
                 <span class="form-control-feedback">IBU</span>
               </div>
@@ -152,7 +184,7 @@
               <span class="form-control" ng-bind="item.name"></span>
             </td>
             <td>
-              <span class="form-control" ng-bind="moments[item.moment]"></span>
+              <span class="form-control" ng-bind="otherMoments[item.moment]"></span>
             </td>
             <td>
               <div class="has-feedback">

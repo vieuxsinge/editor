@@ -46,7 +46,7 @@
       <div class="form-group">
         <label class="control-label col-md-4">Volume final</label>
         <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.batchSize" />
+          <input type="number" class="form-control text-right" ng-model="recipe.finalVolume" />
           <span class="form-control-feedback">L</span>
         </div>
       </div>
@@ -54,7 +54,7 @@
       <div class="form-group">
         <label class="control-label col-md-4">Efficacité</label>
         <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.efficiency" />
+          <input type="number" class="form-control text-right" ng-model="recipe.mashEfficiency" />
           <span class="form-control-feedback">%</span>
         </div>
       </div>
@@ -70,7 +70,7 @@
       <div class="form-group">
         <label class="control-label col-md-4">Pertes par ébullition</label>
         <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.boilRate" />
+          <input type="number" class="form-control text-right" ng-model="recipe.boilLossRate" />
           <span class="form-control-feedback">%/h</span>
         </div>
       </div>
@@ -78,7 +78,7 @@
       <div class="form-group">
         <label class="control-label col-md-4">Pertes par refroidissement</label>
         <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.coolRate" />
+          <input type="number" class="form-control text-right" ng-model="recipe.coolingLossRate" />
           <span class="form-control-feedback">%</span>
         </div>
       </div>
