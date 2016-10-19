@@ -1,5 +1,5 @@
 angular.module('editor.views.recipes.recipe', ['ui.router',
-  'editor.data.ingredients', 'editor.data.recipes',
+  'editor.data.ingredients', 'editor.data.recipes', 'editor.data.styles',
   'editor.services.calculator', 'editor.views.recipes',
   'editor.directives.range', 'editor.filters.recipe'])
   .config(['$stateProvider', function($stateProvider) {
@@ -17,15 +17,15 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
           templateUrl: 'editor/views/recipes.recipe/header.html'
         },
         'info@recipes.recipe': {
-          templateUrl: 'editor/views/recipes.recipe/calculations.html'
+          templateUrl: 'editor/views/recipes.recipe/profile.html'
         }
       }
     });
   }])
   .controller('RecipesRecipeController', function($scope, $state, $stateParams,
-    recipes, ingredients, calculator) {
+    styles, recipes, ingredients, calculator) {
 
-    $scope.bh = Brauhaus;
+    $scope.styles = styles;
     $scope.calc = calculator;
 
     var recipeId = $stateParams.id;

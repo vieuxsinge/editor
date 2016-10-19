@@ -26,16 +26,17 @@
       <div class="btn-group btn-group-justified">
         <div class="btn-group" uib-dropdown>
           <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
-            <span class="pull-left">{{ recipe.style.name || "Choisir un style" }}</span>
+            <span class="pull-left">
+              <span ng-if="recipe.style">{{ recipe.style.id }}. {{ recipe.style.name }}</span>
+              <span ng-if="!recipe.style">Choisir un style</span>
+            </span>
             <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" uib-dropdown-menu>
-            <li ng-repeat-start="category in bh.getStyleCategories()"
-                class="dropdown-header">{{ category }}</li>
-            <li ng-repeat-end ng-repeat="style in bh.getStyles(category)">
-              <a ng-click="recipe.style = bh.getStyle(category, style)">
-                {{ style }}
-              </a>
+            <li ng-repeat-start="category in styles"
+                class="dropdown-header">{{ category.id }}. {{ category.name }}</li>
+            <li ng-repeat-end ng-repeat="style in category.subcategory">
+              <a ng-click="recipe.style = style">{{ style.id }}. {{ style.name }}</a>
             </li>
           </ul>
         </div>

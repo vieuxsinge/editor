@@ -19,7 +19,7 @@
       <td>
         <span class="form-control">
           <span class="glyphicon glyphicon-grain"
-                ng-style="{'color': bh.srmToCss(bh.ebcToSrm(item.color))}"></span>
+                ng-style="{'color': (item.color | cssColor)}"></span>
         </span>
       </td>
       <td>

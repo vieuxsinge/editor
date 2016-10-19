@@ -1,5 +1,5 @@
 angular.module('editor.views.ingredients', ['ui.router', 'editor.views.layout',
-  'editor.data.settings', 'editor.data.ingredients'])
+  'editor.data.settings', 'editor.data.ingredients', 'editor.filters.recipe'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('ingredients', {
       parent: 'layout',
@@ -9,7 +9,6 @@ angular.module('editor.views.ingredients', ['ui.router', 'editor.views.layout',
       controller: ['$scope', 'ingredients', 'settings', function($scope, ingredients, settings) {
         $scope.ingredients = ingredients;
         $scope.settings = settings;
-        $scope.bh = Brauhaus;
         $scope.copy = angular.copy;
         $scope.remove = function(array, item) {
           var index = array.indexOf(item);

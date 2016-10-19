@@ -2,20 +2,20 @@
   <label>Densité initiale</label>
   <span class="pull-right">{{ calc.originalGravity(recipe) | density }}</span>
   <range min="1.000" max="1.150"
-         range-min="recipe.style.gu[0]"
-         range-max="recipe.style.gu[1]"
-         range-min-label="recipe.style.gu[0] | density"
-         range-max-label="recipe.style.gu[1] | density"
+         range-min="recipe.style.stats.og.low"
+         range-max="recipe.style.stats.og.high"
+         range-min-label="recipe.style.stats.og.low | density"
+         range-max-label="recipe.style.stats.og.high | density"
          value="calc.originalGravity(recipe)"></range>
 </div>
 <div class="form-group">
   <label>Densité finale</label>
   <span class="pull-right">{{ calc.finalGravity(recipe) | density }}</span>
   <range min="1.000" max="1.150"
-         range-min="recipe.style.fg[0]"
-         range-max="recipe.style.fg[1]"
-         range-min-label="recipe.style.fg[0] | density"
-         range-max-label="recipe.style.fg[1] | density"
+         range-min="recipe.style.stats.fg.low"
+         range-max="recipe.style.stats.fg.high"
+         range-min-label="recipe.style.stats.fg.low | density"
+         range-max-label="recipe.style.stats.fg.high | density"
          value="calc.finalGravity(recipe)"></range>
 </div>
 <div class="form-group">
@@ -25,31 +25,31 @@
           ng-style="{'background-color': (calc.recipeColor(recipe) | cssColor)}"></span>
     {{ calc.recipeColor(recipe) | color }}
   </span>
-  <range min="0" max="150"
-         range-min="recipe.style.srm[0]"
-         range-max="recipe.style.srm[1]"
-         range-min-label="recipe.style.srm[0] * 1.97 | color"
-         range-max-label="recipe.style.srm[1] * 1.97 | color"
+  <range min="0" max="200"
+         range-min="recipe.style.stats.srm.low * 1.97"
+         range-max="recipe.style.stats.srm.high * 1.97"
+         range-min-label="recipe.style.stats.srm.low * 1.97 | color"
+         range-max-label="recipe.style.stats.srm.high * 1.97 | color"
          value="calc.recipeColor(recipe)"></range>
 </div>
 <div class="form-group">
   <label>Alcool</label>
   <span class="pull-right">{{ calc.abv(recipe) | abv }}</span>
   <range min="0" max="15"
-         range-min="recipe.style.abv[0]"
-         range-max="recipe.style.abv[1]"
-         range-min-label="recipe.style.abv[0] | abv"
-         range-max-label="recipe.style.abv[1] | abv"
+         range-min="recipe.style.stats.abv.low"
+         range-max="recipe.style.stats.abv.high"
+         range-min-label="recipe.style.stats.abv.low | abv"
+         range-max-label="recipe.style.stats.abv.high | abv"
          value="calc.abv(recipe)"></range>
 </div>
 <div class="form-group">
   <label>Amertume</label>
   <span class="pull-right">{{ calc.recipeBitterness(recipe) | ibu }}</span>
   <range min="0" max="120"
-         range-min="recipe.style.ibu[0]"
-         range-max="recipe.style.ibu[1]"
-         range-min-label="recipe.style.ibu[0] | ibu"
-         range-max-label="recipe.style.ibu[1] | ibu"
+         range-min="recipe.style.stats.ibu.low"
+         range-max="recipe.style.stats.ibu.high"
+         range-min-label="recipe.style.stats.ibu.low | ibu"
+         range-max-label="recipe.style.stats.ibu.high | ibu"
          value="calc.recipeBitterness(recipe)"></range>
 </div>
 <div class="form-group">
