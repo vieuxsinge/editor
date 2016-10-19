@@ -32,7 +32,7 @@
             </span>
             <span class="caret"></span>
           </button>
-          <ul class="dropdown-menu" uib-dropdown-menu>
+          <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
             <li ng-repeat-start="category in styles"
                 class="dropdown-header">{{ category.id }}. {{ category.name }}</li>
             <li ng-repeat-end ng-repeat="style in category.subcategory">

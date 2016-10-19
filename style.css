@@ -140,6 +140,12 @@ tr:hover .action, .nav li:hover .action {
   position: relative;
 }
 
+.scrollable-menu {
+  height: auto;
+  max-height: 200px;
+  overflow-x: hidden;
+}
+
 .ingredients-column {
   min-width: 160px;
   padding: 5px 0;
