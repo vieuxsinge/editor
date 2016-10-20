@@ -31,8 +31,9 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     var recipeId = $stateParams.id;
     $scope.recipeId = $stateParams.id;
 
-    recipes.get(recipeId).then(function(response) {
-      $scope.recipe = response;
+    recipes.get(recipeId).then(function(recipe) {
+      $scope.recipe = recipe;
+      $scope.headerEdit = !recipe.name;
       
       // Go to last recipe if current recipe disappear
       $scope.recipes = recipes;
