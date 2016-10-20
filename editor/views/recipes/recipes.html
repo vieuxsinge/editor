@@ -11,7 +11,7 @@
           ui-sref-active-eq="active">
         <a ui-sref="recipes.recipe({id: r.id})">
           <button class="text-danger action pull-right"
-                  ng-click="recipes.remove(r.id); $event.stopPropagation();">
+                  ng-click="remove(r.id); $event.stopPropagation();">
             <span class="fa fa-times-circle"></span>
           </button>
           <span ng-if="r.name" ng-bind="r.name"></span>
