@@ -2,11 +2,11 @@ angular.module('editor.data.settings', [])
   .value('settings', {
     defaults: {
       recipe: {
-        efficiency: 75,
-        boilRate: 10,
-        coolRate: 5,
-        lostVolume: 10,
-        batchSize: 50,
+        mashEfficiency: 75,
+        boilLossRate: 10,
+        coolingLossRate: 4,
+        lostVolume: 2,
+        finalVolume: 20,
         boilTime: 60,
         fermentables: [],
         hops: [],
