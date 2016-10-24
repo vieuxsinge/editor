@@ -5,7 +5,8 @@ angular.module('editor', [
   'editor.views.recipes.recipe',
   'editor.views.recipes.print',
   'editor.views.ingredients',
-  'editor.views.settings'
+  'editor.views.equipments.last',
+  'editor.views.equipments.equipment'
 ])
 .config(['$urlRouterProvider', '$urlMatcherFactoryProvider',
          function($urlRouterProvider, $urlMatcherFactoryProvider) {
