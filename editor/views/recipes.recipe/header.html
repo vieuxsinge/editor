@@ -15,84 +15,72 @@
       </div>
     </div>
 
-    <div class="col-md-8">
+    <div class="col-md-12">
       <div class="form-group">
         <textarea placeholder="Description" class="form-control" required
-               ng-model="recipe.description"></textarea>
+                  ng-model="recipe.description"></textarea>
       </div>
     </div>
 
-    <div class="col-md-4">
-      <div class="btn-group btn-group-justified">
-        <div class="btn-group" uib-dropdown>
-          <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
-            <span class="pull-left">
-              <span ng-if="recipe.style">{{ recipe.style.id }}. {{ recipe.style.name }}</span>
-              <span ng-if="!recipe.style">Choisir un style</span>
-            </span>
-            <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
-            <li ng-repeat-start="category in styles"
-                class="dropdown-header">{{ category.id }}. {{ category.name }}</li>
-            <li ng-repeat-end ng-repeat="style in category.subcategory">
-              <a ng-click="recipe.style = style">{{ style.id }}. {{ style.name }}</a>
-            </li>
-          </ul>
+    <div class="col-md-12">
+
+      <div class="form-horizontal">
+
+        <div class="form-group">
+          <label class="control-label col-md-2">Style</label>
+          <div class="col-md-4">
+            <div class="btn-group-justified">
+              <div class="btn-group" uib-dropdown>
+                <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
+                  <span class="pull-left">
+                    <span ng-if="recipe.style">{{ recipe.style.id }}. {{ recipe.style.name }}</span>
+                    <span ng-if="!recipe.style">Choisir un style</span>
+                  </span>
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
+                  <li ng-repeat-start="category in styles"
+                      class="dropdown-header">{{ category.id }}. {{ category.name }}</li>
+                  <li ng-repeat-end ng-repeat="style in category.subcategory">
+                    <a ng-click="recipe.style = style">{{ style.id }}. {{ style.name }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-md-2">Équipement</label>
+          <div class="col-md-4">
+            <div class="btn-group-justified">
+              <div class="btn-group" uib-dropdown>
+                <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
+                  <span class="pull-left">
+                    {{ (equipments.items | filter:{id:recipe.equipment})[0].name || "Choisir un équipement" }}
+                  </span>
+                  <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
+                  <li ng-repeat="equipment in equipments.items">
+                    <a ng-click="recipe.equipment = equipment.id">{{ equipment.name }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="control-label col-md-2">Volume</label>
+          <div class="has-feedback col-md-2">
+            <input type="number" class="form-control text-right" ng-model="recipe.finalVolume" />
+            <span class="form-control-feedback">L</span>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="form-horizontal col-md-12">
-      <div class="form-group">
-        <label class="control-label col-md-4">Volume final</label>
-        <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.finalVolume" />
-          <span class="form-control-feedback">L</span>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label class="control-label col-md-4">Efficacité</label>
-        <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.mashEfficiency" />
-          <span class="form-control-feedback">%</span>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label class="control-label col-md-4">Durée de l'ébullition</label>
-        <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.boilTime" />
-          <span class="form-control-feedback">mn</span>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label class="control-label col-md-4">Pertes par ébullition</label>
-        <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.boilLossRate" />
-          <span class="form-control-feedback">%/h</span>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label class="control-label col-md-4">Pertes par refroidissement</label>
-        <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.coolingLossRate" />
-          <span class="form-control-feedback">%</span>
-        </div>
-      </div>
-      
-      <div class="form-group">
-        <label class="control-label col-md-4">Pertes fixes après refroidissement</label>
-        <div class="has-feedback col-md-2">
-          <input type="number" class="form-control text-right" ng-model="recipe.lostVolume" />
-          <span class="form-control-feedback">L</span>
-        </div>
-      </div>
-    </div>
-    
     <div class="col-md-12">
       <button class="btn btn-default" ng-click="headerEdit=false">OK</button>
     </div>

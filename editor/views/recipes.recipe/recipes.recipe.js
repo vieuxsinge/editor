@@ -1,7 +1,7 @@
 angular.module('editor.views.recipes.recipe', ['ui.router',
   'editor.data.ingredients', 'editor.data.recipes', 'editor.data.styles',
-  'editor.services.calculator', 'editor.views.recipes',
-  'editor.directives.range', 'editor.filters.recipe'])
+  'editor.data.equipments', 'editor.data.settings', 'editor.services.calculator',
+  'editor.views.recipes', 'editor.directives.range', 'editor.filters.recipe'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
       url: '/:id',
@@ -23,9 +23,10 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     });
   }])
   .controller('RecipesRecipeController', function($scope, $state, $stateParams,
-    styles, recipes, ingredients, calculator) {
+    $filter, styles, equipments, recipes, ingredients, calculator, settings) {
 
     $scope.styles = styles;
+    $scope.equipments = equipments;
     $scope.calc = calculator;
 
     var recipeId = $stateParams.id;
@@ -44,6 +45,12 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
         }
       );
 
+    });
+
+    $scope.$watch('recipe', function(recipe) {
+      if( !recipe ) { return; }
+      var found = $filter('filter')(equipments.items, {id:$scope.recipe.equipment});
+      $scope.equipment = found ? found[0] : settings.defaults.equipment;
     });
 
     $scope.copy = angular.copy;

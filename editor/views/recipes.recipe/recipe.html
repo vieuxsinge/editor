@@ -123,7 +123,7 @@
       <td>
         <div class="has-feedback">
           <span class="form-control text-right">
-            {{ calc.fermentableGravityPercent(recipe, item) | number:0 }}
+            {{ calc.fermentableGravityPercent(recipe, equipment, item) | number:0 }}
           </span>
           <span class="form-control-feedback">%</span>
         </div>
@@ -201,7 +201,7 @@
       <td>
         <div class="has-feedback">
           <span class="form-control text-right">
-            {{ calc.hopBitterness(recipe, item) | number:1 }}
+            {{ calc.hopBitterness(recipe, equipment, item) | number:1 }}
           </span>
           <span class="form-control-feedback">IBU</span>
         </div>
