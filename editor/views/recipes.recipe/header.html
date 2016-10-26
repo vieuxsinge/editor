@@ -42,16 +42,17 @@
               <div class="btn-group" uib-dropdown>
                 <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
                   <span class="pull-left">
-                    <span ng-if="recipe.style">{{ recipe.style.id }}. {{ recipe.style.name }}</span>
-                    <span ng-if="!recipe.style">Choisir un style</span>
+                    <span ng-if="recipe.style">{{ recipe.style.name }}</span>
+                    <span ng-if="!recipe.style">Aucun style</span>
                   </span>
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
+                  <li><a ng-click="recipe.style = null">Aucun style</a></li>
                   <li ng-repeat-start="category in styles"
-                      class="dropdown-header">{{ category.id }}. {{ category.name }}</li>
+                      class="dropdown-header">{{ category.name }}</li>
                   <li ng-repeat-end ng-repeat="style in category.subcategory">
-                    <a ng-click="recipe.style = style">{{ style.id }}. {{ style.name }}</a>
+                    <a ng-click="recipe.style = style">{{ style.name }}</a>
                   </li>
                 </ul>
               </div>
@@ -66,11 +67,14 @@
               <div class="btn-group" uib-dropdown>
                 <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
                   <span class="pull-left">
-                    {{ (equipments.items | filter:{id:recipe.equipment})[0].name || "Choisir un équipement" }}
+                    <span ng-if="recipe.equipment"
+                          ng-bind="(equipments.items | filter:{id:recipe.equipment})[0].name"></span>
+                    <span ng-if="!recipe.equipment">Aucun équipement</span>
                   </span>
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
+                  <li><a ng-click="recipe.equipment = null">Aucun équipement</a></li>
                   <li ng-repeat="equipment in equipments.items">
                     <a ng-click="recipe.equipment = equipment.id">{{ equipment.name }}</a>
                   </li>
