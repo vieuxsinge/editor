@@ -1,7 +1,11 @@
 angular.module('editor.data.settings', [])
   .value('settings', {
+    global: {
+      recipeAutoscale: false
+    },
     defaults: {
       recipe: {
+        finalVolume: 20,
         fermentables: [],
         hops: [],
         others: [],

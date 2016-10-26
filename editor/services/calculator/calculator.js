@@ -175,5 +175,47 @@ angular.module('editor.services.calculator', [])
       return calc.recipeBitterness(recipe, equipment) / sgToGp(calc.originalGravity(recipe, equipment));
     };
 
+    // Scaling
+    calc.recipeScale = function(recipe, ratio) {
+      // Scale
+      angular.forEach(Array.concat(recipe.fermentables, recipe.hops, recipe.others), function(ingredient) {
+        ingredient.weight *= ratio;
+      });
+    };
+      
+    calc.recipeRound = function(recipe) {
+      // Round fermentable at ±0.1kg and others at ±1g
+      angular.forEach(recipe.fermentables, function(ingredient) {
+        ingredient.weight = Math.round(ingredient.weight * 10) / 10;
+      });
+      angular.forEach(Array.concat(recipe.hops, recipe.others), function(ingredient) {
+        ingredient.weight = Math.round(ingredient.weight);
+      });
+    };
+
+    calc.recipeScaleVolume = function(recipe, equipment, oldVolume, newVolume) {
+      if( !recipe || !equipment || !newVolume ) { return; }
+      var oldRecipe = angular.copy(recipe);
+      oldRecipe.finalVolume = oldVolume;
+      
+      var ratio = calc.cooledVolume(recipe, equipment) / calc.cooledVolume(oldRecipe, equipment);
+      calc.recipeScale(recipe, ratio);
+      calc.recipeRound(recipe);
+    };
+
+    calc.recipeScaleEquipment = function(recipe, oldEquipment, newEquipment) {
+      if( !recipe || !oldEquipment || !newEquipment ) { return; }
+
+      // Mash efficiency correction only apply to fermentable ingredients
+      var mashEfficiencyRatio = oldEquipment.mashEfficiency / newEquipment.mashEfficiency;
+      angular.forEach(recipe.fermentables, function(ingredient) {
+        ingredient.weight *= mashEfficiencyRatio;
+      });
+
+      var volumeRatio = calc.cooledVolume(recipe, newEquipment) / calc.cooledVolume(recipe, oldEquipment);
+      calc.recipeScale(recipe, volumeRatio);
+      calc.recipeRound(recipe);
+    };
+
   });
 

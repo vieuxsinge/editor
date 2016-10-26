@@ -27,6 +27,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
 
     $scope.styles = styles;
     $scope.equipments = equipments;
+    $scope.settings = settings;
     $scope.calc = calculator;
 
     var recipeId = $stateParams.id;
@@ -47,10 +48,27 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
 
     });
 
-    $scope.$watch('recipe', function(recipe) {
-      if( !recipe ) { return; }
-      var found = $filter('filter')(equipments.items, {id:$scope.recipe.equipment});
+    // Update equipment
+    $scope.$watch('recipe.equipment', function(id) {
+      if( !id ) { return; }
+      var found = $filter('filter')(equipments.items, {id:id});
       $scope.equipment = found ? found[0] : settings.defaults.equipment;
+    });
+
+    // Watch for volume scaling
+    $scope.$watch('recipe.finalVolume', function(newVolume, oldVolume) {
+      if( !newVolume || !oldVolume ) { return; }
+      if( settings.global.recipeAutoscale ) {
+        calculator.recipeScaleVolume($scope.recipe, $scope.equipment, oldVolume, newVolume);
+      }
+    });
+
+    // Watch for equipment scaling
+    $scope.$watch('equipment', function(newEquipment, oldEquipment) {
+      if( !newEquipment || !oldEquipment ) { return; }
+      if( settings.global.recipeAutoscale ) {
+        calculator.recipeScaleEquipment($scope.recipe, oldEquipment, newEquipment);
+      }
     });
 
     $scope.copy = angular.copy;
