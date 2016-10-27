@@ -4,7 +4,8 @@
       {{ recipe.name || "Nouvelle recette" }}
       <small ng-bind="recipe.style.name"></small>
     </h1>
-    <p style="white-space: pre-line;" class="text-muted" ng-bind="recipe.description"></p>
+    <p style="white-space: pre-line;" class="text-muted"
+       ng-if="recipe.description" ng-bind="recipe.description"></p>
   </div>
   
   <div ng-show="headerEdit">
