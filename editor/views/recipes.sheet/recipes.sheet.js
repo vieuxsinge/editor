@@ -1,12 +1,12 @@
-angular.module('editor.views.recipes.print', ['ui.router',
+angular.module('editor.views.recipes.sheet', ['ui.router',
   'editor.views.recipes.recipe'])
   .config(['$stateProvider', function($stateProvider) {
-    $stateProvider.state('recipes.print', {
+    $stateProvider.state('recipes.sheet', {
       parent: 'recipes.recipe',
-      url: '/print',
+      url: '/sheet',
       views: {
         '@': {
-          templateUrl: 'editor/views/recipes.print/print.html',
+          templateUrl: 'editor/views/recipes.sheet/sheet.html',
           controller: 'RecipesRecipeController'
         }
       }
