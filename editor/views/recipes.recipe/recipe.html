@@ -13,7 +13,7 @@
           <div class="col-sm-3">
             <h3 ng-bind="ingredients.i18n.fermentables"></h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.fermentables.items | filter:{name:query} | orderBy:'color'">
+              <li ng-repeat="item in ingredients.fermentables.items | filter:{name:query} | orderBy:['color','name'] track by item.id">
                 <a ng-click="addFermentable(recipe, item)">
                   <span class="glyphicon glyphicon-grain"
                         ng-style="{'color': (item.color | cssColor)}"
@@ -26,7 +26,7 @@
           <div class="col-sm-3">
             <h3 ng-bind="ingredients.i18n.hops"></h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.hops.items | filter:{name:query}">
+              <li ng-repeat="item in ingredients.hops.items | filter:{name:query} | orderBy:['name'] track by item.id">
                 <a ng-click="addHop(recipe, item)">
                   <span class="glyphicon glyphicon-leaf"
                         style="color: #8c8;"></span>
@@ -38,7 +38,7 @@
           <div class="col-sm-3">
             <h3 ng-bind="ingredients.i18n.yeast"></h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.yeast.items | filter:{name:query}">
+              <li ng-repeat="item in ingredients.yeast.items | filter:{name:query} | orderBy:['name'] track by item.id">
                 <a ng-click="recipe.yeast.push(copy(item));">
                   {{ item.name }}
                 </a>
@@ -48,7 +48,7 @@
           <div class="col-sm-3">
             <h3 ng-bind="ingredients.i18n.others"></h3>
             <ul class="ingredients-column">
-              <li ng-repeat="item in ingredients.others.items | filter:{name:query}">
+              <li ng-repeat="item in ingredients.others.items | filter:{name:query} | orderBy:['name'] track by item.id">
                 <a ng-click="addOther(recipe, item)">
                   {{ item.name }}
                 </a>
