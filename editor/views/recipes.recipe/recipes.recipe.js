@@ -50,11 +50,10 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
 
     // Update equipment
     $scope.$watch('recipe.equipment', function(id) {
-      if( !id ) { return settings.defaults.equipment; }
-      var found = equipments.items.filter(function(item) {
+      var found = equipments.items.find(function(item) {
         return item.id == id;
       });
-      $scope.equipment = found ? found[0] : settings.defaults.equipment;
+      $scope.equipment = found || settings.defaults.equipment;
     });
 
     // Watch for volume scaling
