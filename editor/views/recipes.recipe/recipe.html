@@ -11,7 +11,7 @@
                class="form-control" ng-click="$event.stopPropagation()">
         <div class="row">
           <div class="col-sm-3">
-            <h3>Malt/Extrait</h3>
+            <h3 ng-bind="ingredients.i18n.fermentables"></h3>
             <ul class="ingredients-column">
               <li ng-repeat="item in ingredients.fermentables.items | filter:{name:query} | orderBy:'color'">
                 <a ng-click="addFermentable(recipe, item)">
@@ -24,7 +24,7 @@
             </ul>
           </div>
           <div class="col-sm-3">
-            <h3>Houblon</h3>
+            <h3 ng-bind="ingredients.i18n.hops"></h3>
             <ul class="ingredients-column">
               <li ng-repeat="item in ingredients.hops.items | filter:{name:query}">
                 <a ng-click="addHop(recipe, item)">
@@ -36,7 +36,7 @@
             </ul>
           </div>
           <div class="col-sm-3">
-            <h3>Levure</h3>
+            <h3 ng-bind="ingredients.i18n.yeast"></h3>
             <ul class="ingredients-column">
               <li ng-repeat="item in ingredients.yeast.items | filter:{name:query}">
                 <a ng-click="recipe.yeast.push(copy(item));">
@@ -46,7 +46,7 @@
             </ul>
           </div>
           <div class="col-sm-3">
-            <h3>Autre</h3>
+            <h3 ng-bind="ingredients.i18n.others"></h3>
             <ul class="ingredients-column">
               <li ng-repeat="item in ingredients.others.items | filter:{name:query}">
                 <a ng-click="addOther(recipe, item)">
@@ -101,12 +101,13 @@
         <div class="form-control">
           <div class="btn-group btn-group-xs" uib-dropdown>
             <button class="btn btn-default" uib-dropdown-toggle>
-              {{ fermentableMoments[item.moment] }}
+              <span ng-bind="ingredients.i18n.moments[item.moment]"></span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" uib-dropdown-menu>
-              <li ng-repeat="(moment, name) in fermentableMoments">
-                <a ng-click="item.moment = moment">{{ name }}</a>
+              <li ng-repeat="moment in ingredients.fermentableMoments">
+                <a ng-click="item.moment = moment"
+                   ng-bind="ingredients.i18n.moments[moment]"></a>
               </li>
             </ul>
           </div>
@@ -151,12 +152,13 @@
         <div class="form-control">
           <div class="btn-group btn-group-xs" uib-dropdown>
             <button class="btn btn-default" uib-dropdown-toggle>
-              {{ hopFormats[item.format] }}
+              <span ng-bind="ingredients.i18n.formats[item.format]"></span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" uib-dropdown-menu>
-              <li ng-repeat="(format, name) in hopFormats">
-                <a ng-click="item.format = format">{{ name }}</a>
+              <li ng-repeat="format in ingredients.hopFormats">
+                <a ng-click="item.format = format"
+                   ng-bind="ingredients.i18n.formats[format]"></a>
               </li>
             </ul>
           </div>
@@ -173,12 +175,13 @@
         <div class="form-control">
           <div class="btn-group btn-group-xs" uib-dropdown>
             <button class="btn btn-default" uib-dropdown-toggle>
-              {{ hopMoments[item.moment] }}
+              <span ng-bind="ingredients.i18n.moments[item.moment]"></span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" uib-dropdown-menu>
-              <li ng-repeat="(moment, name) in hopMoments">
-                <a ng-click="item.moment = moment">{{ name }}</a>
+              <li ng-repeat="moment in ingredients.hopMoments">
+                <a ng-click="item.moment = moment"
+                   ng-bind="ingredients.i18n.moments[moment]"></a>
               </li>
             </ul>
           </div>
@@ -225,12 +228,13 @@
         <div class="form-control">
           <div class="btn-group btn-group-xs" uib-dropdown>
             <button class="btn btn-default" uib-dropdown-toggle>
-              {{ otherMoments[item.moment] }}
+              <span ng-bind="ingredients.i18n.moments[item.moment]"></span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" uib-dropdown-menu>
-              <li ng-repeat="(moment, name) in otherMoments">
-                <a ng-click="item.moment = moment">{{ name }}</a>
+              <li ng-repeat="moment in ingredients.otherMoments">
+                <a ng-click="item.moment = moment"
+                   ng-bind="ingredients.i18n.moments[moment]"></a>
               </li>
             </ul>
           </div>

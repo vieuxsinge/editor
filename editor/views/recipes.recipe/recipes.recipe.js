@@ -88,29 +88,10 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
              + recipe.yeast.length + recipe.others.length;
     };
 
-    $scope.fermentableMoments = {
-      steep:  "Trempage",
-      mash:   "Empâtage",
-      boil:   "Ébullition"
-    };
-
     $scope.addFermentable = function(recipe, fermentable) {
       var item = angular.copy(fermentable);
       item.weight = 0;
       recipe.fermentables.push(item);
-    };
-
-    $scope.hopFormats = {
-      pellet: "Pellet",
-      cone:   "Cône"
-    };
-
-    $scope.hopMoments = {
-      mash:           "Empâtage",
-      'first-wort':   "Premier jus",
-      boil:           "Ébullition",
-      late:           "Fin d'ébullition",
-      dry:            "À froid"
     };
 
     $scope.addHop = function(recipe, hop) {
@@ -121,8 +102,6 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
       item.moment = 'boil';
       recipe.hops.push(item);
     };
-
-    $scope.otherMoments = $scope.hopMoments;
 
     $scope.addOther = function(recipe, ingredient) {
       var item = angular.copy(ingredient);
