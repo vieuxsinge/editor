@@ -4,14 +4,15 @@
   
     <div class="col-sm-12">
       <h1>
-        {{ recipe.name }}
+        {{ recipe.name || "Nouvelle recette" }}
         <small ng-if="recipe.style.name">{{ recipe.style.name }}</small>
       </h1>
       <dl class="dl-horizontal">
         <dt>Date de brassage</dt>
         <dd>{{ ellipsis }}</dd>
       </dl>
-      <p style="white-space: pre-line;" class="text-muted" ng-bind="recipe.description"></p>
+      <p style="white-space: pre-line;" class="text-muted"
+         ng-if="recipe.description" ng-bind="recipe.description"></p>
     </div>
 
     <div class="col-sm-12">
@@ -24,15 +25,15 @@
         <dt>Volume final</dt>
         <dd>{{ recipe.finalVolume | volume }}</dd>
         <dt>Densité originale</dt>
-        <dd>{{ calc.originalGravity(recipe) | density }}</dd>
+        <dd>{{ calc.originalGravity(recipe, equipment) | density }}</dd>
         <dt>Densité finale</dt>
-        <dd>{{ calc.finalGravity(recipe) | density }}</dd>
+        <dd>{{ calc.finalGravity(recipe, equipment) | density }}</dd>
         <dt>Alcool</dt>
-        <dd>{{ calc.abv(recipe) | abv }}</dd>
+        <dd>{{ calc.abv(recipe, equipment) | abv }}</dd>
         <dt>Amertume</dt>
-        <dd>{{ calc.recipeBitterness(recipe) | ibu }}</dd>
+        <dd>{{ calc.recipeBitterness(recipe, equipment) | ibu }}</dd>
         <dt>Couleur</dt>
-        <dd>{{ calc.recipeColor(recipe) | color }}</dd>
+        <dd>{{ calc.recipeColor(recipe, equipment) | color }}</dd>
       </dl>
     </div>
     
@@ -57,23 +58,23 @@
     <div class="col-sm-6">
       <h4>Estimé</h4>
       <dl class="dl-horizontal">
-        <dt>Points de densité</dt>
-        <dd>{{ calc.recipeGravityPoints(recipe) | number:0 }}</dd>
+        <dt>Points de densité (à 100°C)</dt>
+        <dd>{{ calc.recipeBoilGravityPoints(recipe, equipment) | number:0 }}</dd>
         <dt>Efficacité</dt>
-        <dd>{{ recipe.mashEfficiency | efficiency }}</dd>
+        <dd>{{ equipment.mashEfficiency | efficiency }}</dd>
         <dt>Volume avant ébullition</dt>
-        <dd>{{ calc.preBoilVolume(recipe) | volume }}</dd>
+        <dd>{{ calc.preBoilVolume(recipe, equipment) | volume }}</dd>
         <dt>Densité avant ébullition</dt>
-        <dd>{{ calc.preBoilGravity(recipe) | density }}</dd>
+        <dd>{{ calc.preBoilGravity(recipe, equipment) | density }}</dd>
         <dt>Volume après ébullition</dt>
-        <dd>{{ calc.postBoilVolume(recipe) | volume }}</dd>
+        <dd>{{ calc.postBoilVolume(recipe, equipment) | volume }}</dd>
       </dl>
     </div>
     
     <div class="col-sm-6">
       <h4>Observé</h4>
       <dl class="dl-horizontal">
-        <dt>Points de densité</dt>
+        <dt>Points de densité (à 100°C)</dt>
         <dd>{{ ellipsis }}</dd>
         <dt>Efficacité</dt>
         <dd>{{ ellipsis }}</dd>
@@ -116,7 +117,7 @@
             </td>
             <td colspan="2"></td>
             <td>
-              <span class="form-control" ng-bind="fermentableMoments[item.moment]"></span>
+              <span class="form-control" ng-bind="ingredients.i18n.moments[item.moment]"></span>
             </td>
             <td></td>
             <td>
@@ -127,8 +128,8 @@
             </td>
             <td>
               <div class="has-feedback">
-                <span class="form-control text-right">
-                  {{ calc.fermentableGravityPercent(recipe, item) | number:0 }}
+                <span class="form-control text-right"
+                      ng-bind="calc.fermentableGravityPercent(recipe, equipment, item) | number:0">
                 </span>
                 <span class="form-control-feedback">%</span>
               </div>
@@ -145,7 +146,7 @@
               <span class="form-control" ng-bind="item.name"></span>
             </td>
             <td>
-              <span class="form-control" ng-bind="hopFormats[item.format]"></span>
+              <span class="form-control" ng-bind="ingredients.i18n.formats[item.format]"></span>
             </td>
             <td>
               <div class="has-feedback">
@@ -154,7 +155,7 @@
               </div>
             </td>
             <td>
-              <span class="form-control" ng-bind="hopMoments[item.moment]"></span>
+              <span class="form-control" ng-bind="ingredients.i18n.moments[item.moment]"></span>
             </td>
             <td>
               <div class="has-feedback">
@@ -170,8 +171,8 @@
             </td>
             <td>
               <div class="has-feedback">
-                <span class="form-control text-right">
-                  {{ calc.hopBitterness(recipe, item) | number:1 }}
+                <span class="form-control text-right"
+                      ng-bind="calc.hopBitterness(recipe, equipment, item) | number:1">
                 </span>
                 <span class="form-control-feedback">IBU</span>
               </div>
@@ -184,7 +185,7 @@
               <span class="form-control" ng-bind="item.name"></span>
             </td>
             <td>
-              <span class="form-control" ng-bind="otherMoments[item.moment]"></span>
+              <span class="form-control" ng-bind="ingredients.i18n.moments[item.moment]"></span>
             </td>
             <td>
               <div class="has-feedback">
