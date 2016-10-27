@@ -148,6 +148,10 @@ angular.module('editor.services.calculator', [])
     };
 
     // Bitterness
+    calc.utilisationBignessFactor = function(recipe, equipment) {
+      return 1.65 * Math.pow(0.000125, calc.averageBoilGravity(recipe, equipment) - 1.0);
+    };
+    
     calc.hopBitterness = function(recipe, equipment, hop) {
       if( !recipe || !equipment || !hop ) { return 0; }
       var formatFactor = {
@@ -155,7 +159,7 @@ angular.module('editor.services.calculator', [])
         'cone':   1.0
       }[hop.format];
 
-      var bignessFactor = (1.65 * Math.pow(0.000125, calc.averageBoilGravity(recipe, equipment) - 1.0) );
+      var bignessFactor = calc.utilisationBignessFactor(recipe, equipment);
       var boilTimeFactor = ( 1.0 - Math.exp(-0.04 * hop.time) ) / 4.15;
       var utilisation = bignessFactor * boilTimeFactor;
       return formatFactor * 10 * utilisation * hop.aa * hop.weight / calc.cooledVolume(recipe, equipment);
@@ -205,15 +209,23 @@ angular.module('editor.services.calculator', [])
 
     calc.recipeScaleEquipment = function(recipe, oldEquipment, newEquipment) {
       if( !recipe || !oldEquipment || !newEquipment ) { return; }
+      var oldRecipe = angular.copy(recipe);
 
-      // Mash efficiency correction only apply to fermentable ingredients
+      var volumeRatio = calc.cooledVolume(recipe, newEquipment) / calc.cooledVolume(oldRecipe, oldEquipment);
+      calc.recipeScale(recipe, volumeRatio);
+
+      // Apply mash efficiency correction to fermentables only
       var mashEfficiencyRatio = oldEquipment.mashEfficiency / newEquipment.mashEfficiency;
       angular.forEach(recipe.fermentables, function(ingredient) {
         ingredient.weight *= mashEfficiencyRatio;
       });
 
-      var volumeRatio = calc.cooledVolume(recipe, newEquipment) / calc.cooledVolume(recipe, oldEquipment);
-      calc.recipeScale(recipe, volumeRatio);
+      // Apply utilisation correction to hops only and after changes on fermentables
+      var utilisationRatio = calc.utilisationBignessFactor(oldRecipe, oldEquipment) / calc.utilisationBignessFactor(recipe, newEquipment);
+      angular.forEach(recipe.hops, function(ingredient) {
+        ingredient.weight *= utilisationRatio;
+      });
+
       calc.recipeRound(recipe);
     };
 
