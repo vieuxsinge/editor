@@ -67,16 +67,15 @@
               <div class="btn-group" uib-dropdown>
                 <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
                   <span class="pull-left">
-                    <span ng-if="recipe.equipment"
-                          ng-bind="(equipments.items | filter:{id:recipe.equipment})[0].name"></span>
+                    <span ng-if="recipe.equipment" ng-bind="equipment.name"></span>
                     <span ng-if="!recipe.equipment">Aucun équipement</span>
                   </span>
                   <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
                   <li><a ng-click="recipe.equipment = null">Aucun équipement</a></li>
-                  <li ng-repeat="equipment in equipments.items">
-                    <a ng-click="recipe.equipment = equipment.id">{{ equipment.name }}</a>
+                  <li ng-repeat="item in equipments.items">
+                    <a ng-click="recipe.equipment = item.id">{{ item.name }}</a>
                   </li>
                 </ul>
               </div>
