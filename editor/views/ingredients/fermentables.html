@@ -9,7 +9,8 @@
 <table class="table">
   <thead>
     <th class="col-md-1"></th>
-    <th class="col-md-8">Nom</th>
+    <th class="col-md-6">Nom</th>
+    <th class="col-md-2">Moment</th>
     <th class="col-md-1 text-right">Couleur</th>
     <th class="col-md-1 text-right">Extrait</th>
     <th class="col-md-1"></th>
@@ -24,6 +25,22 @@
       </td>
       <td>
         <input class="form-control" ng-model="item.name" ng-model-options="{ updateOn: 'blur' }">
+      </td>
+      <td>
+        <div class="form-control">
+          <div class="btn-group btn-group-xs" uib-dropdown>
+            <button class="btn btn-default" uib-dropdown-toggle>
+              <span ng-bind="ingredients.i18n.moments[item.moment]"></span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+              <li ng-repeat="moment in ingredients.fermentableMoments">
+                <a ng-click="item.moment = moment"
+                   ng-bind="ingredients.i18n.moments[moment]"></a>
+              </li>
+            </ul>
+          </div>
+        </div>
       </td>
       <td>
         <div class="has-feedback">

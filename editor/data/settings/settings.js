@@ -13,6 +13,7 @@ angular.module('editor.data.settings', [])
       },
       fermentable: {
         name: '',
+        moment: 'mash',
         color: 0,
         yield: 100
       },
