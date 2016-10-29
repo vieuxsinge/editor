@@ -2,6 +2,8 @@ language: python
 branches:
   only:
   - gh-pages
+script:
+- echo "nothing" > nothing
 addons:
   ssh_known_hosts: 62.210.170.125
 before_deploy:
