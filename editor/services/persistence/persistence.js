@@ -56,16 +56,17 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
                 angular.copy(value, object);
               }
               state.initialized = true;
+              state.saved = angular.copy(value);
             });
           });
           
           // Watch and save
           $rootScope.$watch(function() {
-            return object;
-          }, function(newItems, oldItems) {
-            if( newItems === oldItems ) { return; }
+            return angular.equals(object, state.saved);
+          }, function(stable) {
+            if( !state.initialized || stable ) { return; }
             state.needSave = true;
-          }, true);
+          });
 
           $rootScope.$watch(function() {
             return state.needSave && !state.saving;
