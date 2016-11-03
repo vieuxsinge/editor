@@ -1,24 +1,38 @@
-<div class="row">
-  <div class="navbar navbar-default sidebar sidebar-fixed sidebar-left col-md-2">
-    <div class="form-group">
-      <button class="btn btn-primary" ng-click="create()">
-        <span class="fa fa-plus-circle"></span>
-        Nouvelle recette
-      </button>
-    </div>
-    <ul class="nav navbar-nav" ng-show="recipes.items.length != 0">
-      <li ng-repeat="r in recipes.items | orderBy:'-last_modified' track by r.id"
-          ui-sref-active-eq="active">
-        <a ui-sref="recipes.recipe({id: r.id})">
-          <button class="text-danger action pull-right"
-                  ng-click="remove(r.id); $event.stopPropagation();">
-            <span class="fa fa-times-circle"></span>
-          </button>
-          <span ng-if="r.name" ng-bind="r.name"></span>
-          <em ng-if="!r.name">Nouvelle recette</em>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="content col-md-offset-2 col-md-10" ui-view></div>
+<div class="form-group">
+  <button class="btn btn-primary" ng-click="create()">
+    <span class="fa fa-plus-circle"></span>
+    Nouvelle recette
+  </button>
 </div>
+
+<p class="alert alert-info" ng-if="recipes.items.length == 0">
+  Aucune recette
+</p>
+
+<div class="list-group" ng-show="recipes.items.length != 0">
+  <a class="list-group-item" ui-sref="recipes.recipe({id: recipe.id})"
+     ng-repeat="recipe in recipes.items | orderBy:'-last_modified' track by recipe.id">
+    <div class="row">
+      <h4 class="list-group-item-heading col-md-8">
+        <span ng-if="recipe.name" ng-bind="recipe.name"></span>
+        <em ng-if="!recipe.name">Nouvelle recette</em>
+        <small ng-bind="recipe.style.name"></small>
+      </h4>
+      <div class="col-md-4">
+        <button class="text-danger action pull-right"
+                ng-click="remove(recipe.id); $event.preventDefault(); $event.stopPropagation();"
+                title="Supprimer la recette">
+          <span class="fa fa-times-circle"></span>
+        </button>
+      </div>
+    </div>
+    <h6 class="text-muted">
+      <span class="fa fa-flask"></span>
+      {{ (equipments.items | filter:{id:recipe.equipment})[0].name | suffix:', ' }}
+      {{ recipe.finalVolume | volume }}
+    </h6>
+    <p style="white-space: pre-line;" class="text-muted"
+       ng-if="recipe.description" ng-bind="recipe.description"></p>
+  </a>
+</div>
+

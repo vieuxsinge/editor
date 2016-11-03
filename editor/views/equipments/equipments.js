@@ -1,13 +1,21 @@
 angular.module('editor.views.equipments', ['ui.router', 'ui.bootstrap',
-  'editor.views.layout', 'editor.data.equipments', 'editor.data.settings'])
+  'editor.data.equipments', 'editor.data.settings'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('equipments', {
-      parent: 'layout',
       url: '/equipments',
-      abstract: true,
-      templateUrl: 'editor/views/equipments/equipments.html',
-      controller: 'EquipmentsController'
+      views: {
+        '@': {
+          templateUrl: 'editor/views/layout/layout.html',
+          controller: 'EquipmentsController'
+        },
+        '@equipments': {
+          templateUrl: 'editor/views/equipments/equipments.html'
+        }
+      }
     });
+  }])
+  .run(['mainMenu', function(mainMenu) {
+    mainMenu.add('Équipements', 'equipments', 'equipments');
   }])
   .controller('EquipmentsController', function($scope, $state, $uibModal,
     equipments, settings) {

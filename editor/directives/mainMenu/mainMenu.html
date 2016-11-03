@@ -1,5 +1,10 @@
-<div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
+<div class="navbar navbar-default navbar-static-top">
+  <div class="container">
+    <div class="navbar-header">
+      <div class="navbar-brand">
+        <span class="fa fa-beer"></span>
+      </div>
+    </div>
     <ul class="nav navbar-nav" ng-controller="MainMenuController as menu">
       <li ng-repeat="item in menu.items"
           ng-class="{active: ((item.group || item.state) | includedByState)}">

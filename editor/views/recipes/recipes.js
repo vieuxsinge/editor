@@ -1,18 +1,27 @@
 angular.module('editor.views.recipes', ['ui.router', 'ui.bootstrap',
-  'editor.views.layout', 'editor.data.recipes', 'editor.data.settings'])
+  'editor.directives.mainMenu', 'editor.data.recipes', 'editor.data.settings'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes', {
-      parent: 'layout',
       url: '/recipes',
-      abstract: true,
-      templateUrl: 'editor/views/recipes/recipes.html',
-      controller: 'RecipesController'
+      views: {
+        '@': {
+          templateUrl: 'editor/views/layout/layout.html',
+          controller: 'RecipesController'
+        },
+        '@recipes': {
+          templateUrl: 'editor/views/recipes/recipes.html'
+        }
+      }
     });
   }])
+  .run(['mainMenu', function(mainMenu) {
+    mainMenu.add('Recettes', 'recipes', 'recipes');
+  }])
   .controller('RecipesController', function($scope, $state, $uibModal, recipes,
-    settings) {
+    equipments, settings) {
     
     $scope.recipes = recipes;
+    $scope.equipments = equipments;
 
     $scope.create = function() {
       recipes.create(angular.copy(settings.defaults.recipe)).then(function(recipe) {

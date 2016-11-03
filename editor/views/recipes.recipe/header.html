@@ -1,111 +1,114 @@
-<div class="row well">
-  <div class="col-md-12 recipe-header-display" ng-show="!headerEdit" ng-click="headerEdit=true">
-    <h1>
-      {{ recipe.name || "Nouvelle recette" }}
-      <small ng-bind="recipe.style.name"></small>
-    </h1>
-    <p style="white-space: pre-line;" class="text-muted"
-       ng-if="recipe.description" ng-bind="recipe.description"></p>
+<div ng-show="!headerEdit">
+  <button class="pull-right btn btn-default btn-xs" ng-click="headerEdit=true">
+    <span class="fa fa-pencil"></span>
+    Éditer
+  </button>
+  <h1>
+    {{ recipe.name || "Nouvelle recette" }}
+    <small ng-bind="recipe.style.name"></small>
+  </h1>
+  <h6 class="text-muted">
+    <span class="fa fa-flask"></span>
+    {{ equipment.name | suffix:', ' }}
+    {{ recipe.finalVolume | volume }}
+  </h6>
+  <p style="white-space: pre-line;" class="text-muted"
+     ng-if="recipe.description" ng-bind="recipe.description"></p>
+</div>
+
+<div ng-show="headerEdit">
+  <div class="form-group">
+    <input placeholder="Titre" ng-model="recipe.name"
+           class="form-control input-lg" />
+  </div>
+
+  <div class="form-group">
+    <textarea placeholder="Description" class="form-control" msd-elastic
+              ng-model="recipe.description"></textarea>
   </div>
   
-  <div ng-show="headerEdit">
-    <div class="col-md-12">
-      <div class="form-group">
-        <input placeholder="Titre" ng-model="recipe.name"
-               class="form-control input-lg" />
+  <div class="form-horizontal" style="margin-top: 20px;">
+
+    <div class="form-group">
+      <div class="checkbox col-md-10 col-md-offset-2">
+        <label>
+          <input type="checkbox" ng-model="settings.global.recipeAutoscale">
+          Mettre les ingrédients à l'échelle
+        </label>
       </div>
     </div>
 
-    <div class="col-md-12">
-      <div class="form-group">
-        <textarea placeholder="Description" class="form-control" required
-                  ng-model="recipe.description"></textarea>
-      </div>
-    </div>
-
-    <div class="col-md-12">
-
-      <div class="form-horizontal">
-
-        <div class="form-group">
-          <div class="checkbox col-md-10 col-md-offset-2">
-            <label>
-              <input type="checkbox" ng-model="settings.global.recipeAutoscale">
-              Mettre les ingrédients à l'échelle
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label col-md-2">Style</label>
-          <div class="col-md-4">
-            <div class="btn-group-justified">
-              <div class="btn-group" uib-dropdown>
-                <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
-                  <span class="pull-left">
-                    <span ng-if="recipe.style">{{ recipe.style.name }}</span>
-                    <span ng-if="!recipe.style">Aucun style</span>
-                  </span>
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
-                  <li><a ng-click="recipe.style = null">Aucun style</a></li>
-                  <li ng-repeat-start="category in styles"
-                      class="dropdown-header">{{ category.name }}</li>
-                  <li ng-repeat-end ng-repeat="style in category.subcategory">
-                    <a ng-click="recipe.style = style">{{ style.name }}</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label col-md-2">Équipement</label>
-          <div class="col-md-4">
-            <div class="btn-group-justified">
-              <div class="btn-group" uib-dropdown>
-                <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
-                  <span class="pull-left">
-                    <span ng-if="recipe.equipment" ng-bind="equipment.name"></span>
-                    <span ng-if="!recipe.equipment">Aucun équipement</span>
-                  </span>
-                  <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
-                  <li><a ng-click="recipe.equipment = null">Aucun équipement</a></li>
-                  <li ng-repeat="item in equipments.items">
-                    <a ng-click="recipe.equipment = item.id">{{ item.name }}</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <button class="btn btn-default"
-                    ng-click="recipe.finalVolume = equipment.finalVolume">
-              Utiliser les valeurs par défaut
+    <div class="form-group">
+      <label class="control-label col-md-2">Style</label>
+      <div class="col-md-4">
+        <div class="btn-group-justified">
+          <div class="btn-group" uib-dropdown>
+            <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
+              <span class="pull-left">
+                <span ng-if="recipe.style">{{ recipe.style.name }}</span>
+                <span ng-if="!recipe.style">Aucun style</span>
+              </span>
+              <span class="caret"></span>
             </button>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="control-label col-md-2">Volume</label>
-          <div class="has-feedback col-md-2">
-            <input type="number" class="form-control text-right"
-                   ng-model="recipe.finalVolume"
-                   ng-model-options="{ updateOn: 'blur' }" />
-            <span class="form-control-feedback">L</span>
+            <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
+              <li><a ng-click="recipe.style = null">Aucun style</a></li>
+              <li ng-repeat-start="category in styles"
+                  class="dropdown-header">{{ category.name }}</li>
+              <li ng-repeat-end ng-repeat="style in category.subcategory">
+                <a ng-click="recipe.style = style">{{ style.name }}</a>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="col-md-12">
+    <div class="form-group">
+      <label class="control-label col-md-2">Équipement</label>
+      <div class="col-md-4">
+        <div class="btn-group-justified">
+          <div class="btn-group" uib-dropdown>
+            <button class="btn btn-default" uib-dropdown-toggle style="text-align: right;">
+              <span class="pull-left">
+                <span ng-if="recipe.equipment" ng-bind="equipment.name"></span>
+                <span ng-if="!recipe.equipment">Aucun équipement</span>
+              </span>
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu scrollable-menu" uib-dropdown-menu>
+              <li><a ng-click="recipe.equipment = null">Aucun équipement</a></li>
+              <li ng-repeat="item in equipments.items">
+                <a ng-click="recipe.equipment = item.id">{{ item.name }}</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <button class="btn btn-default"
+                ng-click="recipe.finalVolume = equipment.finalVolume">
+          Utiliser les valeurs par défaut
+        </button>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="control-label col-md-2">Volume</label>
+      <div class="has-feedback col-md-2">
+        <input type="number" class="form-control text-right"
+               ng-model="recipe.finalVolume"
+               ng-model-options="{ updateOn: 'blur' }" />
+        <span class="form-control-feedback">L</span>
+      </div>
+    </div>
+
+    <div>
       <button class="btn btn-default" ng-click="headerEdit=false">OK</button>
     </div>
 
   </div>
+
 </div>
+
+<div class="row profile" ng-include="'/editor/views/recipes.recipe/profile.html'"></div>
 

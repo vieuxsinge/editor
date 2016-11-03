@@ -1,24 +1,26 @@
-<div class="row">
-  <div class="navbar navbar-default sidebar sidebar-fixed sidebar-left col-md-2">
-    <div class="form-group">
-      <button class="btn btn-primary" ng-click="create()">
-        <span class="fa fa-plus-circle"></span>
-        Nouvel équipement
-      </button>
-    </div>
-    <ul class="nav navbar-nav" ng-show="equipments.items.length != 0">
-      <li ng-repeat="item in equipments.items | orderBy:'-last_modified' track by item.id"
-          ui-sref-active-eq="active">
-        <a ui-sref="equipments.equipment({id: item.id})">
-          <button class="text-danger action pull-right"
-                  ng-click="remove(item.id); $event.stopPropagation();">
-            <span class="fa fa-times-circle"></span>
-          </button>
-          <span ng-if="item.name" ng-bind="item.name"></span>
-          <em ng-if="!item.name">Sans nom</em>
-        </a>
-      </li>
-    </ul>
-  </div>
-  <div class="content col-md-offset-2 col-md-10" ui-view></div>
+<div class="form-group">
+  <button class="btn btn-primary" ng-click="create()">
+    <span class="fa fa-plus-circle"></span>
+    Nouvel équipement
+  </button>
 </div>
+
+<p class="alert alert-info" ng-if="equipments.items.length == 0">
+  Aucun équipement
+</p>
+
+<div class="list-group" ng-show="equipments.items.length != 0">
+  <a class="list-group-item" ui-sref="equipments.equipment({id: item.id})"
+     ng-repeat="item in equipments.items | orderBy:'-last_modified' track by item.id">
+    <button class="text-danger action pull-right"
+            ng-click="remove(item.id); $event.preventDefault(); $event.stopPropagation();"
+            title="Supprimer l'équipement">
+      <span class="fa fa-times-circle"></span>
+    </button>
+    <h4 class="list-group-item-heading">
+      <span ng-if="item.name" ng-bind="item.name"></span>
+      <em ng-if="!item.name">Nouvel équipement</em>
+    </h4>
+  </a>
+</div>
+

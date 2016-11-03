@@ -1,23 +1,21 @@
-angular.module('editor.views.recipes.recipe', ['ui.router',
+angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic',
   'editor.data.ingredients', 'editor.data.recipes', 'editor.data.styles',
   'editor.data.equipments', 'editor.data.settings', 'editor.services.calculator',
-  'editor.views.recipes', 'editor.directives.range', 'editor.filters.recipe'])
+  'editor.views.recipes', 'editor.directives.range',
+  'editor.filters.recipe', 'editor.filters.text'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
       url: '/:id',
       views: {
-        '': {
-          templateUrl: 'editor/views/recipes.recipe/layout.html',
+        '@': {
+          templateUrl: 'editor/views/layout/layout.header.html',
           controller: 'RecipesRecipeController'
-        },
-        'content@recipes.recipe': {
-          templateUrl: 'editor/views/recipes.recipe/recipe.html'
         },
         'header@recipes.recipe': {
           templateUrl: 'editor/views/recipes.recipe/header.html'
         },
-        'info@recipes.recipe': {
-          templateUrl: 'editor/views/recipes.recipe/profile.html'
+        '@recipes.recipe': {
+          templateUrl: 'editor/views/recipes.recipe/body.html'
         }
       }
     });
@@ -36,16 +34,6 @@ angular.module('editor.views.recipes.recipe', ['ui.router',
     recipes.get(recipeId).then(function(recipe) {
       $scope.recipe = recipe;
       $scope.headerEdit = !recipe.name;
-      
-      // Go to last recipe if current recipe disappear
-      $scope.recipes = recipes;
-      $scope.$watch('(recipes.items | filter:{id:recipe.id}).length',
-        function(len) {
-          if( len > 0 ) { return; }
-          $state.go('recipes.last');
-        }
-      );
-
     });
 
     // Update equipment

@@ -1,0 +1,8 @@
+<ul class="nav nav-tabs">
+  <li ng-repeat="category in ['fermentables', 'hops', 'others', 'yeast']"
+      ui-sref-active-eq="active">
+    <a ui-sref="{{ 'ingredients.' + category }}">
+      {{ ingredients.i18n[category] }}
+    </a>
+  </li>
+</ul>

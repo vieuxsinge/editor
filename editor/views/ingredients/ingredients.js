@@ -1,20 +1,26 @@
-angular.module('editor.views.ingredients', ['ui.router', 'editor.views.layout',
-  'editor.data.settings', 'editor.data.ingredients', 'editor.filters.recipe'])
+angular.module('editor.views.ingredients', ['ui.router', 'editor.data.settings',
+  'editor.data.ingredients', 'editor.filters.recipe'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('ingredients', {
-      parent: 'layout',
       url: '/ingredients',
       abstract: true,
-      templateUrl: 'editor/views/ingredients/layout.html',
-      controller: ['$scope', 'ingredients', 'settings', function($scope, ingredients, settings) {
-        $scope.ingredients = ingredients;
-        $scope.settings = settings;
-        $scope.copy = angular.copy;
-        $scope.remove = function(array, item) {
-          var index = array.indexOf(item);
-          array.splice(index, 1);
-        };
-      }]
+      views: {
+        '': {
+          templateUrl: 'editor/views/layout/layout.header.html',
+          controller: function($scope, ingredients, settings) {
+            $scope.ingredients = ingredients;
+            $scope.settings = settings;
+            $scope.copy = angular.copy;
+            $scope.remove = function(array, item) {
+              var index = array.indexOf(item);
+              array.splice(index, 1);
+            };
+          }
+        },
+        'header@ingredients': {
+          templateUrl: 'editor/views/ingredients/header.html'
+        }
+      }
     }).state('ingredients.default', {
       url: '',
       controller: ['$state', function($state) {

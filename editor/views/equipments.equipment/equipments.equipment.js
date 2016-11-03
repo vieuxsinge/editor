@@ -3,8 +3,18 @@ angular.module('editor.views.equipments.equipment', ['ui.router',
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('equipments.equipment', {
       url: '/:id',
-      templateUrl: 'editor/views/equipments.equipment/equipment.html',
-      controller: 'EquipmentsEquipmentController'
+      views: {
+        '@': {
+          templateUrl: 'editor/views/layout/layout.header.html',
+          controller: 'EquipmentsEquipmentController'
+        },
+        'header@equipments.equipment': {
+          templateUrl: 'editor/views/equipments.equipment/header.html'
+        },
+        '@equipments.equipment': {
+          templateUrl: 'editor/views/equipments.equipment/body.html'
+        }
+      }
     });
   }])
   .controller('EquipmentsEquipmentController', function($scope, $state,
