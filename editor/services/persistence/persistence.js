@@ -62,11 +62,11 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
           
           // Watch and save
           $rootScope.$watch(function() {
-            return angular.equals(object, state.saved);
-          }, function(stable) {
-            if( !state.initialized || stable ) { return; }
+            return object;
+          }, function(newObject, oldObject) {
+            if( !state.initialized || angular.equals(newObject, oldObject) ) { return; }
             state.needSave = true;
-          });
+          }, true);
 
           $rootScope.$watch(function() {
             return state.needSave && !state.saving;
