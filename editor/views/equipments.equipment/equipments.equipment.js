@@ -25,16 +25,6 @@ angular.module('editor.views.equipments.equipment', ['ui.router',
 
     equipments.get(equipmentId).then(function(equipment) {
       $scope.equipment = equipment;
-      
-      // Go to last equipment if current equipment disappear
-      $scope.equipments = equipments;
-      $scope.$watch('(equipments.items | filter:{id:equipment.id}).length',
-        function(len) {
-          if( len > 0 ) { return; }
-          $state.go('equipments.last');
-        }
-      );
-
     });
 
   });
