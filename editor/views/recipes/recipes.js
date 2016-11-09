@@ -1,5 +1,5 @@
 angular.module('editor.views.recipes', ['ui.router', 'ui.bootstrap',
-  'editor.directives.mainMenu', 'editor.data.recipes', 'editor.data.settings'])
+  'editor.data.recipes', 'editor.data.settings', 'editor.views.layout'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes', {
       url: '/recipes',
