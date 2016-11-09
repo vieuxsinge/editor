@@ -14,6 +14,5 @@ angular.module('editor.conf.persistence', ['editor.services.persistence',
     persistence.persistCollection(recipes, 'recipes');
     persistence.persistCollection(ingredients, 'ingredients');
     persistence.persistCollection(equipments, 'equipments');
-    persistence.persistObject(settings.global, 'settings.global');
-  
+
   });
