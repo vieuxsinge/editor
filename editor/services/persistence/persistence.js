@@ -2,48 +2,80 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
   .provider('persistence', function() {
     var provider = this;
 
-    // Kinto parameters
-    provider.url = ''
-    provider.username = '';
-    provider.password = '';
-    provider.bucket = 'default';
-    
-    provider.$get = function($rootScope, $q) {
+    provider.$get = function($rootScope, $q, $log) {
       var factory = this;
       
-      var kinto = new KintoClient(provider.url, {
-        headers: {Authorization: "Basic " + btoa(provider.username + ':' + provider.password)}
-      });
-      var kbucket = kinto.bucket(provider.bucket);
-
       return new (function() {
         var service = this;
 
-        var states = [];
+        service.settings = {
+          url: '',
+          headers: {},
+          bucket: 'default'
+        };
+
+        $rootScope.$watch(function() {
+          return [service.settings, setupFunctions];
+        }, function() {
+          if(setupFunctions.length == 0) { return; }
+          setup();
+        }, true);
+
+        var kbucket;
+
+        var states;
         var createState = function() {
           var state = {
             initialized: false,
             needSave: false,
             saving: false,
-            saved: null
+            saved: null,
+            cleanupFunctions: []
           };
           states.push(state);
           return state;
         };
 
-        var initDeferred = $q.defer();
-
-        $rootScope.$watch(function() {
-          return states.reduce(function(value, state) {
-            return value && state.initialized;
-          }, true);
-        }, function(initialized) {
-          if( !initialized ) { return; }
-          initDeferred.resolve();
-        });
-
-        var init = function() {
+        var initDeferred;
+        var waitInit = function() {
           return initDeferred.promise;
+        };
+
+        var setupFunctions = [];
+        var setup = function() {
+          if(states) {
+            angular.forEach(states, function(state) {
+              angular.forEach(state.cleanupFunctions, function(func) {
+                func();
+              });
+            });
+          }
+          states = [];
+          
+          if(initDeferred) {
+            initDeferred.reject();
+          }
+          initDeferred = $q.defer();
+
+          var kinto = new KintoClient(service.settings.url, {
+            headers: service.settings.headers
+          });
+          kbucket = kinto.bucket(service.settings.bucket);
+
+          initDeferred.promise.finally(
+            $rootScope.$watch(function() {
+              return states.reduce(function(value, state) {
+                return value && state.initialized;
+              }, true);
+            }, function(initialized) {
+              if( !initialized ) { return; }
+              initDeferred.resolve();
+            })
+          );
+
+          angular.forEach(setupFunctions, function(func) {
+            func();
+          });
         };
 
         var watchAndSave = function(object, storage) {
@@ -58,39 +90,45 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
               state.initialized = true;
               state.saved = angular.copy(value);
             });
+          }).catch(function() {
+            $log.error("Failed to retrieve");
           });
           
           // Watch and save
-          $rootScope.$watch(function() {
-            return object;
-          }, function(newObject, oldObject) {
-            if( !state.initialized || angular.equals(newObject, oldObject) ) { return; }
-            state.needSave = true;
-          }, true);
+          state.cleanupFunctions.push(
+            $rootScope.$watch(function() {
+              return object;
+            }, function(newObject, oldObject) {
+              if( !state.initialized || angular.equals(newObject, oldObject) ) { return; }
+              state.needSave = true;
+            }, true)
+          );
 
-          $rootScope.$watch(function() {
-            return state.needSave && !state.saving;
-          }, function(value) {
-            if( !value ) { return; }
-            state.saving = true;
-            state.needSave = false;
-            var toBeSaved = angular.copy(object);
-            storage.set(toBeSaved, state)
-              .catch(function() {
-                $log.error("Failed to save, retrying...");
-                state.needSave = true;
-              })
-              .then(function() {
-                state.saved = toBeSaved;
-              })
-              .finally(function() {
-                state.saving = false;
-              });
-          });
+          state.cleanupFunctions.push(
+            $rootScope.$watch(function() {
+              return state.needSave && !state.saving;
+            }, function(value) {
+              if( !value ) { return; }
+              state.saving = true;
+              state.needSave = false;
+              var toBeSaved = angular.copy(object);
+              storage.set(toBeSaved, state)
+                .catch(function() {
+                  $log.error("Failed to save, retrying...");
+                  state.needSave = true;
+                })
+                .then(function() {
+                  state.saved = toBeSaved;
+                })
+                .finally(function() {
+                  state.saving = false;
+                });
+            })
+          );
 
         };
 
-        service.persistObject = function(object, name) {
+        var persistObjectSetup = function(object, name) {
           var storage = {
             get: function(state) {
               return $q.when(kbucket.getData())
@@ -108,35 +146,35 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
           watchAndSave(object, storage);
         };
 
-        service.persistCollection = function(collection, name) {
-          var popById = function(items, id) {
-            var found;
-            angular.forEach(items, function(item) {
-              if( item.id == id ) {
-                found = item;
-              }
-            });
+        var popById = function(items, id) {
+          var found;
+          angular.forEach(items, function(item) {
+            if( item.id == id ) {
+              found = item;
+            }
+          });
 
-            if( !found ) { return; }
-            return items.splice(items.indexOf(found), 1)[0];
-          };
+          if( !found ) { return; }
+          return items.splice(items.indexOf(found), 1)[0];
+        };
 
-          var detectChanges = function(newItems, oldItems) {
-            var res = { added: [], removed: [], modified: [] };
-            var oldItemsCopy = angular.copy(oldItems) || [];
-            angular.forEach(newItems, function(newItem) {
-              var oldItem = popById(oldItemsCopy, newItem.id);
-              if( !oldItem ) {
-                res.added.push(newItem);
-              }
-              else if( !angular.equals(newItem, oldItem) ) {
-                res.modified.push(newItem);
-              }
-            });
-            res.removed = oldItemsCopy;
-            return res;
-          };
+        var detectChanges = function(newItems, oldItems) {
+          var res = { added: [], removed: [], modified: [] };
+          var oldItemsCopy = angular.copy(oldItems) || [];
+          angular.forEach(newItems, function(newItem) {
+            var oldItem = popById(oldItemsCopy, newItem.id);
+            if( !oldItem ) {
+              res.added.push(newItem);
+            }
+            else if( !angular.equals(newItem, oldItem) ) {
+              res.modified.push(newItem);
+            }
+          });
+          res.removed = oldItemsCopy;
+          return res;
+        };
 
+        var persistCollectionSetup = function(collection, name) {
           var kcollection = kbucket.collection(name);
 
           var storage = {
@@ -165,12 +203,20 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
           // Patch collection
           var originalGet = collection.get;
           collection.get = function(id) {
-            return init().then(function() {
+            return waitInit().then(function() {
               return originalGet.bind(collection)(id);
             });
           };
 
           watchAndSave(collection.items, storage);
+        };
+
+        service.persistObject = function(object, name) {
+          setupFunctions.push(persistObjectSetup.bind(null, object, name));
+        };
+
+        service.persistCollection = function(collection, name) {
+          setupFunctions.push(persistCollectionSetup.bind(null, collection, name));
         };
 
       })();
