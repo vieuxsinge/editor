@@ -12,20 +12,24 @@ angular.module('editor.data.settings', [])
         yeast: []
       },
       fermentable: {
+        category: 'fermentables',
         name: '',
         moment: 'mash',
         color: 0,
         yield: 100
       },
       hop: {
+        category: 'hops',
         name: '',
         aa: 5
       },
       yeast: {
+        category: 'yeast',
         name: '',
         attenuation: 75
       },
       other: {
+        category: 'others',
         name: ''
       },
       equipment: {

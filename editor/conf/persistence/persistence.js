@@ -12,10 +12,7 @@ angular.module('editor.conf.persistence', ['editor.services.persistence',
   .run(function(persistence, recipes, equipments, ingredients, settings) {
   
     persistence.persistCollection(recipes, 'recipes');
-    persistence.persistCollection(ingredients.fermentables, 'fermentables');
-    persistence.persistCollection(ingredients.hops, 'hops');
-    persistence.persistCollection(ingredients.yeast, 'yeast');
-    persistence.persistCollection(ingredients.others, 'others');
+    persistence.persistCollection(ingredients, 'ingredients');
     persistence.persistCollection(equipments, 'equipments');
     persistence.persistObject(settings.global, 'settings.global');
   

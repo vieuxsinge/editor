@@ -1,6 +1,6 @@
 <div class="form-group">
   <button class="btn btn-primary"
-          ng-click="ingredients.others.create(copy(settings.defaults.other))">
+          ng-click="ingredients.create(copy(settings.defaults.other))">
     <span class="fa fa-plus-circle"></span>
     Nouvel ingrédient
   </button>
@@ -12,14 +12,14 @@
     <th class="col-md-1"></th>
   </thead>
   <tbody>
-    <tr ng-repeat="item in ingredients.others.items | orderBy:['name'] track by item.id">
+    <tr ng-repeat="item in ingredients.items | filter:{category:'others'} | orderBy:['name'] track by item.id">
       <td>
         <input class="form-control" ng-model="item.name"
                ng-model-options="{ updateOn: 'blur' }">
       </td>
       <td class="text-right">
         <div class="form-control">
-          <a class="action text-danger" ng-click="remove(ingredients.others.items, item)">
+          <a class="action text-danger" ng-click="remove(ingredients.items, item)">
             <span class="glyphicon glyphicon-remove-sign"></span>
           </a>
         </div>

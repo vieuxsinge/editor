@@ -1,6 +1,6 @@
 <div class="form-group">
   <button class="btn btn-primary"
-          ng-click="ingredients.fermentables.create(copy(settings.defaults.fermentable))">
+          ng-click="ingredients.create(copy(settings.defaults.fermentable))">
     <span class="fa fa-plus-circle"></span>
     Nouveau malt/extrait
   </button>
@@ -16,7 +16,7 @@
     <th class="col-md-1"></th>
   </thead>
   <tbody>
-    <tr ng-repeat="item in ingredients.fermentables.items | orderBy:['color','name'] track by item.id">
+    <tr ng-repeat="item in ingredients.items | filter:{category:'fermentables'} | orderBy:['color','name'] track by item.id">
       <td>
         <span class="form-control">
           <span class="glyphicon glyphicon-grain"
@@ -30,13 +30,13 @@
         <div class="form-control">
           <div class="btn-group btn-group-xs" uib-dropdown>
             <button class="btn btn-default" uib-dropdown-toggle>
-              <span ng-bind="ingredients.i18n.moments[item.moment]"></span>
+              <span ng-bind="ingredientsI18n.moments[item.moment]"></span>
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" uib-dropdown-menu>
-              <li ng-repeat="moment in ingredients.fermentableMoments">
+              <li ng-repeat="moment in ingredientsParameters.fermentableMoments">
                 <a ng-click="item.moment = moment"
-                   ng-bind="ingredients.i18n.moments[moment]"></a>
+                   ng-bind="ingredientsI18n.moments[moment]"></a>
               </li>
             </ul>
           </div>
@@ -58,7 +58,7 @@
       </td>
       <td class="text-right">
         <div class="form-control">
-          <a class="action text-danger" ng-click="remove(ingredients.fermentables.items, item)">
+          <a class="action text-danger" ng-click="remove(ingredients.items, item)">
             <span class="glyphicon glyphicon-remove-sign"></span>
           </a>
         </div>

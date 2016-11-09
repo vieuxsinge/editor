@@ -7,8 +7,11 @@ angular.module('editor.views.ingredients', ['ui.router', 'editor.data.settings',
       views: {
         '': {
           templateUrl: 'editor/views/layout/layout.header.html',
-          controller: function($scope, ingredients, settings) {
+          controller: function($scope, ingredients, ingredientsParameters,
+            ingredientsI18n, settings) {
             $scope.ingredients = ingredients;
+            $scope.ingredientsParameters = ingredientsParameters;
+            $scope.ingredientsI18n = ingredientsI18n;
             $scope.settings = settings;
             $scope.copy = angular.copy;
             $scope.remove = function(array, item) {

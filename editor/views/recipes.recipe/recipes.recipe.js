@@ -21,7 +21,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic'
     });
   }])
   .controller('RecipesRecipeController', function($scope, $state, $stateParams,
-    $filter, styles, equipments, recipes, ingredients, calculator, settings) {
+    $filter, styles, equipments, recipes, ingredients, ingredientsI18n,
+    ingredientsParameters, calculator, settings) {
 
     $scope.styles = styles;
     $scope.equipments = equipments;
@@ -67,6 +68,8 @@ angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic'
 
     // Ingredients
     $scope.ingredients = ingredients;
+    $scope.ingredientsI18n = ingredientsI18n;
+    $scope.ingredientsParameters = ingredientsParameters;
 
     $scope.numberOfIngredients = function(recipe) {
       if( !recipe ) { return 0; }
