@@ -6,7 +6,11 @@
   </button>
 </div>
 
-<table class="table">
+<p class="alert alert-info" ng-if="(ingredients.items | filter:{category:'others'}).length == 0">
+  Aucun ingrédient
+</p>
+
+<table class="table" ng-if="(ingredients.items | filter:{category:'others'}).length != 0">
   <thead>
     <th class="col-md-11">Nom</th>
     <th class="col-md-1"></th>

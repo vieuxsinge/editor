@@ -6,7 +6,11 @@
   </button>
 </div>
 
-<table class="table">
+<p class="alert alert-info" ng-if="(ingredients.items | filter:{category:'yeast'}).length == 0">
+  Aucune levure
+</p>
+
+<table class="table" ng-if="(ingredients.items | filter:{category:'yeast'}).length != 0">
   <thead>
     <th class="col-md-10">Nom</th>
     <th class="col-md-1 text-right">Atténuation</th>
