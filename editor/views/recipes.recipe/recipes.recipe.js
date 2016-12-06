@@ -1,11 +1,10 @@
 angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic',
-  'editor.data.ingredients', 'editor.data.recipes', 'editor.data.styles',
-  'editor.data.equipments', 'editor.data.settings', 'editor.services.calculator',
-  'editor.views.recipes', 'editor.directives.range',
+  'editor.data.styles', 'editor.data.settings', 'editor.services.calculator',
+  'editor.views.recipes', 'editor.views.project', 'editor.directives.range',
   'editor.filters.recipe', 'editor.filters.text'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
-      url: '/:id',
+      url: '/{recipe}',
       views: {
         '@': {
           templateUrl: 'editor/views/layout/layout.header.html',
@@ -21,25 +20,25 @@ angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic'
     });
   }])
   .controller('RecipesRecipeController', function($scope, $state, $stateParams,
-    $filter, styles, equipments, recipes, ingredients, ingredientsI18n,
-    ingredientsParameters, calculator, settings) {
+    $filter, styles, ingredientsI18n, ingredientsParameters, calculator,
+    settings, project) {
 
     $scope.styles = styles;
-    $scope.equipments = equipments;
+    $scope.equipments = project.equipments;
     $scope.settings = settings;
     $scope.calc = calculator;
 
     var recipeId = $stateParams.id;
     $scope.recipeId = $stateParams.id;
 
-    recipes.get(recipeId).then(function(recipe) {
+    project.recipes.get(recipeId).then(function(recipe) {
       $scope.recipe = recipe;
       $scope.headerEdit = !recipe.name;
     });
 
     // Update equipment
     $scope.$watch('recipe.equipment', function(id) {
-      $scope.equipment = equipments.items.find(function(item) {
+      $scope.equipment = project.equipments.items.find(function(item) {
         return item.id == id;
       });
     });
@@ -67,7 +66,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic'
     };
 
     // Ingredients
-    $scope.ingredients = ingredients;
+    $scope.ingredients = project.ingredients;
     $scope.ingredientsI18n = ingredientsI18n;
     $scope.ingredientsParameters = ingredientsParameters;
 

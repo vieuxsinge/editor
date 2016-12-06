@@ -1,39 +1,46 @@
 angular.module('editor.views.recipes', ['ui.router', 'ui.bootstrap',
-  'editor.data.recipes', 'editor.data.settings', 'editor.views.layout'])
-  .config(['$stateProvider', function($stateProvider) {
+  'editor.data.settings', 'editor.views.project'])
+  .config(function($stateProvider) {
     $stateProvider.state('recipes', {
+      parent: 'project',
       url: '/recipes',
       views: {
-        '@': {
-          templateUrl: 'editor/views/layout/layout.html',
+        '@project': {
+          templateUrl: 'editor/views/recipes/recipes.html',
           controller: 'RecipesController'
-        },
-        '@recipes': {
-          templateUrl: 'editor/views/recipes/recipes.html'
         }
       }
     });
-  }])
-  .run(['mainMenu', function(mainMenu) {
-    mainMenu.add('Recettes', 'recipes', 'recipes');
-  }])
-  .controller('RecipesController', function($scope, $state, $uibModal, recipes,
-    equipments, settings) {
-    
-    $scope.recipes = recipes;
-    $scope.equipments = equipments;
+  })
+  .run(function(projectMenu) {
+    projectMenu.add('Recettes', 'recipes', 'recipes');
+  })
+  .controller('RecipesController', function($scope, $state, $uibModal, $q,
+    settings, project) {
+
+    $q.all({
+      recipes: project.recipes.list(),
+      equipments: project.equipments.list()
+    }).then(function(res) {
+      $scope.recipes = res.recipes;
+      $scope.equipments = res.equipments;
+    }).catch(function(e) {
+      //TODO
+    });
 
     $scope.create = function() {
-      recipes.create(angular.copy(settings.defaults.recipe)).then(function(recipe) {
-        $state.go('recipes.recipe', { id: recipe.id });
+      project.recipes.create(angular.copy(settings.defaults.recipe)).then(function(recipe) {
+        $state.go('.recipe', { id: recipe.id });
       });
     };
 
-    $scope.remove = function(id) {
+    $scope.delete = function(id) {
       $uibModal.open({
         templateUrl: 'editor/views/recipes/modal_remove.html'
       }).result.then(function() {
-        recipes.remove(id);
+        project.recipes.delete(id).then(function() {
+          $state.reload();
+        });
       });
     };
 

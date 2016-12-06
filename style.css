@@ -31,7 +31,7 @@ textarea[msd-elastic] {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
-.navbar > .container .navbar-brand {
+.navbar > .container .navbar-brand a {
   color: black;
   height: auto;
   padding: 0 20px 0 0;

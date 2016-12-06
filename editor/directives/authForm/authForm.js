@@ -1,16 +1,7 @@
-angular.module('editor.directives.authForm', ['editor.data.auth'])
-  .controller('AuthFormController', function($scope, auth) {
+angular.module('editor.directives.authForm', ['editor.services.auth'])
+  .controller('AuthFormController', function($scope, $state, auth, authService) {
     $scope.auth = auth;
-
-    $scope.login = function(user, password) {
-      auth.user = user;
-      auth.auth = 'Basic ' + btoa(user + ':' + password);
-    };
-
-    $scope.logout = function() {
-      auth.user = null;
-      auth.auth = null;
-    };
+    $scope.authService = authService;
   })
   .component('authForm', {
     templateUrl: 'editor/directives/authForm/authForm.html',

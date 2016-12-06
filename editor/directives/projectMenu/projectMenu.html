@@ -1,4 +1,4 @@
-<ul class="nav navbar-nav">
+<ul class="nav nav-tabs">
   <li ng-repeat="item in menu.items"
       ng-class="{active: ((item.group || item.state) | includedByState)}">
     <a ui-sref="{{ item.state }}">{{ item.name }}</a>

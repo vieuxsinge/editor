@@ -1,12 +1,14 @@
-<form class="navbar-form" ng-submit="login(user, password)" ng-if="!auth.auth">
+<form class="navbar-form" ng-submit="authService.login(user, password)" ng-if="!auth.user">
   <input class="form-control" ng-model="user" placeholder="Utilisateur">
   <input class="form-control" ng-model="password" placeholder="Mot de passe" type="password">
   <button class="btn btn-default" type="submit">OK</button>
 </form>
 
-<div ng-if="auth.auth">
+<div ng-if="auth.user">
   <p class="navbar-text">
     Bienvenue {{auth.user}}
   </p>
-  <button class="btn btn-default navbar-btn" ng-click="logout()">Se déconnecter</button>
+  <button class="btn btn-default navbar-btn" ng-click="authService.logout()">
+    Se déconnecter
+  </button>
 </div>

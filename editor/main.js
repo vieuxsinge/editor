@@ -1,16 +1,16 @@
 angular.module('editor', [
-  'ui.router',
-  'editor.conf.persistence',
+  'editor.conf.auth',
+  'editor.conf.kinto',
   'editor.conf.loadingbar',
+  'editor.views.auth',
+  'editor.views.home',
   'editor.views.recipes',
-  'editor.views.recipes.recipe',
+/*  'editor.views.recipes.recipe',
   'editor.views.recipes.sheet',
   'editor.views.ingredients',
   'editor.views.equipments',
-  'editor.views.equipments.equipment'
+  'editor.views.equipments.equipment'*/
 ])
-.config(['$urlRouterProvider', '$urlMatcherFactoryProvider',
-         function($urlRouterProvider, $urlMatcherFactoryProvider) {
-  $urlRouterProvider.when('', '/recipes');
+.config(function($urlMatcherFactoryProvider) {
   $urlMatcherFactoryProvider.strictMode(false);
-}]);
+});
