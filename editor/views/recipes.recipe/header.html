@@ -4,14 +4,15 @@
     Éditer
   </button>
   <h1>
+    <small><a ui-sref="project.home({project: project.id})" ng-bind="project.id"></a> / </small>
     {{ recipe.name || "Nouvelle recette" }}
     <small ng-bind="recipe.style.name"></small>
   </h1>
-  <h6 class="text-muted">
+  <p class="text-muted">
     <span class="fa fa-flask"></span>
     {{ equipment.name | suffix:', ' }}
     {{ recipe.finalVolume | volume }}
-  </h6>
+  </p>
   <p style="white-space: pre-line;" class="text-muted"
      ng-if="recipe.description" ng-bind="recipe.description"></p>
 </div>

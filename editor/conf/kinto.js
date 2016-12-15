@@ -4,10 +4,12 @@ angular.module('editor.conf.kinto', ['editor.services.kinto',
 
     kinto.settings.url = 'https://kinto.notmyidea.org/v1/';
 
-    $rootScope.$watch(function() { return auth.user + ':' + auth.pass; },
-      function(value) {
-        headers = value ? {Authorization: 'Basic ' + btoa(value)} : {};
-        kinto.settings.options.headers = headers;
-      });
+    $rootScope.$watch(function() { return auth.user; }, function() {
+      headers = {}
+      if( auth.user ) {
+        headers['Authorization'] = 'Basic ' + btoa(auth.user + ':' + auth.pass);
+      }
+      kinto.settings.options.headers = headers;
+    });
 
   });

@@ -1,16 +1,16 @@
 <div class="form-group">
   <button class="btn btn-primary"
-          ng-click="ingredients.create(copy(settings.defaults.fermentable))">
+          ng-click="create(copy(settings.defaults.fermentable))">
     <span class="fa fa-plus-circle"></span>
     Nouveau malt/extrait
   </button>
 </div>
 
-<p class="alert alert-info" ng-if="(ingredients.items | filter:{category:'fermentables'}).length == 0">
+<p class="alert alert-info" ng-if="(ingredients | filter:{category:'fermentables'}).length == 0">
   Aucun malt/extrait
 </p>
 
-<table class="table" ng-if="(ingredients.items | filter:{category:'fermentables'}).length != 0">
+<table class="table" ng-if="(ingredients | filter:{category:'fermentables'}).length != 0">
   <thead>
     <th class="col-md-1"></th>
     <th class="col-md-6">Nom</th>
@@ -20,7 +20,7 @@
     <th class="col-md-1"></th>
   </thead>
   <tbody>
-    <tr ng-repeat="item in ingredients.items | filter:{category:'fermentables'} | orderBy:['color','name'] track by item.id">
+    <tr ng-repeat="item in ingredients | filter:{category:'fermentables'} | orderBy:['color','name'] track by item.id">
       <td>
         <span class="form-control">
           <span class="glyphicon glyphicon-grain"
@@ -62,7 +62,7 @@
       </td>
       <td class="text-right">
         <div class="form-control">
-          <a class="action text-danger" ng-click="remove(ingredients.items, item)">
+          <a class="action text-danger" ng-click="remove(item)">
             <span class="glyphicon glyphicon-remove-sign"></span>
           </a>
         </div>

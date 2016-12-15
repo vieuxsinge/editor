@@ -1,7 +1,7 @@
 angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic',
-  'editor.data.styles', 'editor.data.settings', 'editor.services.calculator',
-  'editor.views.recipes', 'editor.views.project', 'editor.directives.range',
-  'editor.filters.recipe', 'editor.filters.text'])
+  'editor.data.styles', 'editor.data.settings', 'editor.data.ingredients',
+  'editor.services.calculator', 'editor.views.recipes', 'editor.views.project',
+  'editor.directives.range', 'editor.filters.recipe', 'editor.filters.text'])
   .config(['$stateProvider', function($stateProvider) {
     $stateProvider.state('recipes.recipe', {
       url: '/{recipe}',
@@ -20,26 +20,52 @@ angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic'
     });
   }])
   .controller('RecipesRecipeController', function($scope, $state, $stateParams,
-    $filter, styles, ingredientsI18n, ingredientsParameters, calculator,
-    settings, project) {
+    $q, styles, ingredientsI18n, ingredientsParameters, calculator, settings,
+    project) {
 
     $scope.styles = styles;
-    $scope.equipments = project.equipments;
     $scope.settings = settings;
+    $scope.project = project;
     $scope.calc = calculator;
+    $scope.ingredientsI18n = ingredientsI18n;
+    $scope.ingredientsParameters = ingredientsParameters;
+    $scope.copy = angular.copy;
+    $scope.remove = function(array, item) {
+      var index = array.indexOf(item);
+      array.splice(index, 1);
+    };
 
-    var recipeId = $stateParams.id;
-    $scope.recipeId = $stateParams.id;
+    var recipeId = $stateParams.recipe;
+    $scope.recipeId = recipeId;
 
-    project.recipes.get(recipeId).then(function(recipe) {
-      $scope.recipe = recipe;
-      $scope.headerEdit = !recipe.name;
+    $q.all({
+      recipe: project.recipes.get(recipeId),
+      equipments: project.equipments.list(),
+      ingredients: project.ingredients.list()
+    }).then(function(res) {
+      $scope.recipe = res.recipe;
+      $scope.headerEdit = !res.recipe.name;
+
+      $scope.equipments = res.equipments;
+      $scope.ingredients = res.ingredients;
+    }).catch(function(e) {
+      //TODO
     });
+
+    // Push recipe modifications
+    $scope.$watch('recipe', function(newRecipe, oldRecipe) {
+      if( !newRecipe || !oldRecipe ) { return; }
+      project.recipes.update(newRecipe).catch(function(e) {
+        //TODO
+      });
+    }, true);
 
     // Update equipment
     $scope.$watch('recipe.equipment', function(id) {
-      $scope.equipment = project.equipments.items.find(function(item) {
-        return item.id == id;
+      project.equipments.get(id).then(function(equipment) {
+        $scope.equipment = equipment;
+      }).catch(function(e) {
+        //TODO
       });
     });
 
@@ -59,17 +85,7 @@ angular.module('editor.views.recipes.recipe', ['ui.router', 'monospaced.elastic'
       }
     });
 
-    $scope.copy = angular.copy;
-    $scope.remove = function(array, item) {
-      var index = array.indexOf(item);
-      array.splice(index, 1);
-    };
-
     // Ingredients
-    $scope.ingredients = project.ingredients;
-    $scope.ingredientsI18n = ingredientsI18n;
-    $scope.ingredientsParameters = ingredientsParameters;
-
     $scope.numberOfIngredients = function(recipe) {
       if( !recipe ) { return 0; }
       return recipe.fermentables.length + recipe.hops.length

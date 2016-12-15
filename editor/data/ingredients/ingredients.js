@@ -1,7 +1,4 @@
 angular.module('editor.data.ingredients', ['editor.services.collection'])
-  .factory('ingredients', function(Collection) {
-    return new Collection();
-  })
   .value('ingredientsParameters', {
     fermentableMoments: ['steep', 'mash', 'boil'],
     hopMoments: ['mash', 'firstWort', 'boil', 'late', 'dry'],

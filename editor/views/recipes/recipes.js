@@ -1,5 +1,6 @@
 angular.module('editor.views.recipes', ['ui.router', 'ui.bootstrap',
-  'editor.data.settings', 'editor.views.project'])
+  'editor.filters.text', 'editor.filters.recipe', 'editor.data.settings',
+  'editor.views.project'])
   .config(function($stateProvider) {
     $stateProvider.state('recipes', {
       parent: 'project',
@@ -31,6 +32,8 @@ angular.module('editor.views.recipes', ['ui.router', 'ui.bootstrap',
     $scope.create = function() {
       project.recipes.create(angular.copy(settings.defaults.recipe)).then(function(recipe) {
         $state.go('.recipe', { id: recipe.id });
+      }).catch(function(e) {
+        //TODO
       });
     };
 
@@ -40,6 +43,8 @@ angular.module('editor.views.recipes', ['ui.router', 'ui.bootstrap',
       }).result.then(function() {
         project.recipes.delete(id).then(function() {
           $state.reload();
+        }).catch(function(e) {
+          //TODO
         });
       });
     };

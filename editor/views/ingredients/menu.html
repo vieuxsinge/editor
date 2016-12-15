@@ -1,0 +1,11 @@
+<div class="row">
+  <ul class="nav nav-stacked nav-pills col-md-2">
+    <li ng-repeat="category in ['fermentables', 'hops', 'others', 'yeast']"
+        ui-sref-active-eq="active">
+      <a ui-sref="{{ 'ingredients.' + category }}">
+        {{ ingredientsI18n[category] }}
+      </a>
+    </li>
+  </ul>
+  <div class="col-md-10" ui-view></div>
+</div>

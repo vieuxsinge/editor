@@ -1,34 +1,54 @@
-angular.module('editor.views.ingredients', ['ui.router', 'editor.data.settings',
+angular.module('editor.views.ingredients', ['ui.router',
+  'editor.directives.projectMenu', 'editor.data.settings',
   'editor.data.ingredients', 'editor.filters.recipe'])
-  .config(['$stateProvider', function($stateProvider) {
+  .config(function($stateProvider) {
     $stateProvider.state('ingredients', {
+      parent: 'project',
       url: '/ingredients',
       abstract: true,
       views: {
         '': {
-          templateUrl: 'editor/views/layout/layout.header.html',
-          controller: function($scope, ingredients, ingredientsParameters,
-            ingredientsI18n, settings) {
-            $scope.ingredients = ingredients;
+          templateUrl: 'editor/views/ingredients/menu.html',
+          controller: function($scope, ingredientsParameters, ingredientsI18n,
+            settings, project) {
             $scope.ingredientsParameters = ingredientsParameters;
             $scope.ingredientsI18n = ingredientsI18n;
             $scope.settings = settings;
             $scope.copy = angular.copy;
-            $scope.remove = function(array, item) {
-              var index = array.indexOf(item);
-              array.splice(index, 1);
+
+            var refresh = function() {
+              return project.ingredients.list().then(function(ingredients) {
+                $scope.ingredients = ingredients;
+              }).catch(function(e) {
+                //TODO
+              });
             };
+
+            $scope.create = function(ingredient) {
+              project.ingredients.create(ingredient).catch(function(e) {
+                //TODO
+              }).then(function() {
+                refresh();
+              });
+            };
+            
+            $scope.remove = function(ingredient) {
+              project.ingredients.delete(ingredient.id).catch(function(e) {
+                //TODO
+              }).then(function() {
+                refresh();
+              });
+            };
+            
+            refresh();
           }
-        },
-        'header@ingredients': {
-          templateUrl: 'editor/views/ingredients/header.html'
         }
       }
     }).state('ingredients.default', {
       url: '',
-      controller: ['$state', function($state) {
+      controller: function($state) {
         $state.go('ingredients.fermentables');
-      }]
+      }
     }).state('ingredients.fermentables', {
       url: '/fermentables',
       templateUrl: 'editor/views/ingredients/fermentables.html'
@@ -42,8 +62,8 @@ angular.module('editor.views.ingredients', ['ui.router', 'editor.data.settings',
       url: '/others',
       templateUrl: 'editor/views/ingredients/others.html'
     });
-  }])
-  .run(['mainMenu', function(mainMenu) {
-    mainMenu.add('Ingrédients', 'ingredients.default', 'ingredients');
-  }]);
+  })
+  .run(function(projectMenu) {
+    projectMenu.add('Ingrédients', 'ingredients.default', 'ingredients');
+  });
 
