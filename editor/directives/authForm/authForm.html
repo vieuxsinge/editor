@@ -1,7 +1,7 @@
 <form class="navbar-form" ng-submit="login(user, password)" ng-if="!auth.auth">
-  <input class="form-control" ng-model="user" placeholder="Utilisateur">
-  <input class="form-control" ng-model="password" placeholder="Mot de passe" type="password">
-  <button class="btn btn-default" type="submit">OK</button>
+  <input class="form-control" ng-model="user" placeholder="nom d'utilisateur">
+  <input class="form-control" ng-model="password" placeholder="mot de passe">
+  <button class="btn btn-default" type="submit">Se connecter</button> ou <a ui-sref="accounts">créer un compte</a>
 </form>
 
 <div ng-if="auth.auth">

@@ -2,10 +2,11 @@ angular.module('editor', [
   'ui.router',
   'editor.conf.persistence',
   'editor.conf.loadingbar',
+  'editor.views.accounts',
   'editor.views.recipes',
   'editor.views.recipes.recipe',
   'editor.views.recipes.sheet',
-  'editor.views.ingredients',
+  // 'editor.views.ingredients',
   'editor.views.equipments',
   'editor.views.equipments.equipment'
 ])
