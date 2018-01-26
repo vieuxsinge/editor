@@ -8,7 +8,7 @@ angular.module('editor.conf.persistence', ['ngStorage',
   .run(function($rootScope, persistence, auth, recipes, equipments,
     ingredients) {
 
-    persistence.settings.url = 'http://localhost:8888/v1/';
+    persistence.settings.url = 'https://kinto.notmyidea.org/v1/';
     persistence.settings.bucket = 'beer-editor';
 
     $rootScope.$watch(function() { return auth.auth; }, function(authHeader) {
