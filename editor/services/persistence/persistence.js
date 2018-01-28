@@ -4,7 +4,7 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
 
     provider.$get = function($rootScope, $q, $log) {
       var factory = this;
-      
+
       return new (function() {
         var service = this;
 
@@ -51,7 +51,7 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
             });
           }
           states = [];
-          
+
           if(initDeferred) {
             initDeferred.reject();
           }
@@ -80,7 +80,7 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
 
         var watchAndSave = function(object, storage) {
           var state = createState();
-          
+
           // Populate
           storage.get(state).then(function(value) {
             $rootScope.$applyAsync(function() {
@@ -91,9 +91,9 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
               state.saved = angular.copy(value);
             });
           }).catch(function() {
-            $log.error("Failed to retrieve");
+            $log.error("Failed to retrieve", object);
           });
-          
+
           // Watch and save
           state.cleanupFunctions.push(
             $rootScope.$watch(function() {
@@ -113,8 +113,8 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
               state.needSave = false;
               var toBeSaved = angular.copy(object);
               storage.set(toBeSaved, state)
-                .catch(function() {
-                  $log.error("Failed to save, retrying...");
+                .catch(function(err) {
+                  $log.error("Failed to save, retrying...", err);
                   state.needSave = true;
                 })
                 .then(function() {
@@ -194,7 +194,16 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
                   batch.deleteRecord(item.id);
                 });
                 angular.forEach(changes.modified, function(item) {
-                  batch.updateRecord(item);
+                  var options = {};
+                  if (item.hasOwnProperty('isPublic')) {
+                    var permissions = {}
+                    if (item.isPublic == true) {
+                        permissions['read'] = ['system.Everyone',];
+                    }
+                    options['permissions'] = permissions;
+                  }
+                  console.log('updateRecord', item, options);
+                  batch.updateRecord(item, options);
                 });
               }));
             }
@@ -222,4 +231,3 @@ angular.module('editor.services.persistence', ['editor.data.recipes'])
       })();
     };
   });
-

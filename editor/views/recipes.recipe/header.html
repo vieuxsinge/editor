@@ -26,7 +26,7 @@
     <textarea placeholder="Description" class="form-control" msd-elastic
               ng-model="recipe.description"></textarea>
   </div>
-  
+
   <div class="form-horizontal" style="margin-top: 20px;">
 
     <div class="form-group">
@@ -34,6 +34,12 @@
         <label>
           <input type="checkbox" ng-model="settings.global.recipeAutoscale">
           Mettre les ingrédients à l'échelle
+        </label>
+      </div>
+      <div class="checkbox col-md-10 col-md-offset-2">
+        <label>
+          <input type="checkbox" ng-model="recipe.isPublic">
+          Rendre la recette publique
         </label>
       </div>
     </div>
@@ -111,4 +117,3 @@
 </div>
 
 <div class="row profile" ng-include="'/editor/views/recipes.recipe/profile.html'"></div>
-
