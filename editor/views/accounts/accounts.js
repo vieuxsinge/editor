@@ -11,6 +11,10 @@ angular.module('editor.views.accounts', ['ui.router', 'ui.bootstrap', 'editor.da
           templateUrl: 'editor/views/accounts/accounts.html'
         }
       }
+    })
+    .state('accounts.error', {
+      url: '/error',
+      templateUrl: 'editor/views/accounts/error.html'
     });
   }])
   .controller('AccountsController', function($scope, $state, $uibModal, auth, accounts) {
